@@ -1,0 +1,303 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		83AB8BB21B80E5530062010E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BB11B80E5530062010E /* AppDelegate.swift */; };
+		83AB8BB41B80E5530062010E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BB31B80E5530062010E /* ViewController.swift */; };
+		83AB8BB61B80E5530062010E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83AB8BB51B80E5530062010E /* Assets.xcassets */; };
+		83AB8BB91B80E5530062010E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83AB8BB71B80E5530062010E /* Main.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		83AB8BAE1B80E5530062010E /* Swift8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swift8.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		83AB8BB11B80E5530062010E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		83AB8BB31B80E5530062010E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		83AB8BB51B80E5530062010E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		83AB8BB81B80E5530062010E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		83AB8BBA1B80E5530062010E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		83AB8BAB1B80E5530062010E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		83AB8BA51B80E5530062010E = {
+			isa = PBXGroup;
+			children = (
+				83AB8BB01B80E5530062010E /* Swift8 */,
+				83AB8BAF1B80E5530062010E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		83AB8BAF1B80E5530062010E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				83AB8BAE1B80E5530062010E /* Swift8.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		83AB8BB01B80E5530062010E /* Swift8 */ = {
+			isa = PBXGroup;
+			children = (
+				83AB8BC01B80E64E0062010E /* App */,
+				83AB8BC21B80E66E0062010E /* Chip8 */,
+			);
+			path = Swift8;
+			sourceTree = "<group>";
+		};
+		83AB8BC01B80E64E0062010E /* App */ = {
+			isa = PBXGroup;
+			children = (
+				83AB8BB11B80E5530062010E /* AppDelegate.swift */,
+				83AB8BB31B80E5530062010E /* ViewController.swift */,
+				83AB8BC11B80E6570062010E /* Resources */,
+			);
+			name = App;
+			sourceTree = "<group>";
+		};
+		83AB8BC11B80E6570062010E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				83AB8BB51B80E5530062010E /* Assets.xcassets */,
+				83AB8BB71B80E5530062010E /* Main.storyboard */,
+				83AB8BBA1B80E5530062010E /* Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		83AB8BC21B80E66E0062010E /* Chip8 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Chip8;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		83AB8BAD1B80E5530062010E /* Swift8 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 83AB8BBD1B80E5530062010E /* Build configuration list for PBXNativeTarget "Swift8" */;
+			buildPhases = (
+				83AB8BAA1B80E5530062010E /* Sources */,
+				83AB8BAB1B80E5530062010E /* Frameworks */,
+				83AB8BAC1B80E5530062010E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Swift8;
+			productName = Swift8;
+			productReference = 83AB8BAE1B80E5530062010E /* Swift8.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		83AB8BA61B80E5530062010E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Matthijn Dijkstra";
+				TargetAttributes = {
+					83AB8BAD1B80E5530062010E = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = 83AB8BA91B80E5530062010E /* Build configuration list for PBXProject "Swift8" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 83AB8BA51B80E5530062010E;
+			productRefGroup = 83AB8BAF1B80E5530062010E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				83AB8BAD1B80E5530062010E /* Swift8 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		83AB8BAC1B80E5530062010E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83AB8BB61B80E5530062010E /* Assets.xcassets in Resources */,
+				83AB8BB91B80E5530062010E /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		83AB8BAA1B80E5530062010E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				83AB8BB41B80E5530062010E /* ViewController.swift in Sources */,
+				83AB8BB21B80E5530062010E /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		83AB8BB71B80E5530062010E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				83AB8BB81B80E5530062010E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		83AB8BBB1B80E5530062010E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		83AB8BBC1B80E5530062010E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		83AB8BBE1B80E5530062010E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Swift8/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.Indev.Swift8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		83AB8BBF1B80E5530062010E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Swift8/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = nl.Indev.Swift8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		83AB8BA91B80E5530062010E /* Build configuration list for PBXProject "Swift8" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83AB8BBB1B80E5530062010E /* Debug */,
+				83AB8BBC1B80E5530062010E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		83AB8BBD1B80E5530062010E /* Build configuration list for PBXNativeTarget "Swift8" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				83AB8BBE1B80E5530062010E /* Debug */,
+				83AB8BBF1B80E5530062010E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 83AB8BA61B80E5530062010E /* Project object */;
+}
