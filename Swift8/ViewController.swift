@@ -8,17 +8,23 @@
 
 import Cocoa
 
-class ViewController: NSViewController {
+class ViewController: NSViewController
+{
 
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
+        
+        let chip = Chip8(graphics: Graphics(), sound: Sound(), keyboard: Keyboard())
+        chip.startLoop();
 
-        // Do any additional setup after loading the view.
     }
 
-    override var representedObject: AnyObject? {
-        didSet {
-        // Update the view, if already loaded.
+    override var representedObject: AnyObject?
+    {
+        didSet
+        {
+            // Update the view, if already loaded.
         }
     }
 

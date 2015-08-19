@@ -11,6 +11,10 @@
 		83AB8BB41B80E5530062010E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BB31B80E5530062010E /* ViewController.swift */; };
 		83AB8BB61B80E5530062010E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83AB8BB51B80E5530062010E /* Assets.xcassets */; };
 		83AB8BB91B80E5530062010E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83AB8BB71B80E5530062010E /* Main.storyboard */; };
+		83AB8BC41B83633A0062010E /* Chip8.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BC31B83633A0062010E /* Chip8.swift */; };
+		83AB8BC81B836E690062010E /* Graphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BC71B836E690062010E /* Graphics.swift */; };
+		83AB8BCA1B836E740062010E /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BC91B836E740062010E /* Sound.swift */; };
+		83AB8BCC1B836E7C0062010E /* Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BCB1B836E7C0062010E /* Keyboard.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +24,10 @@
 		83AB8BB51B80E5530062010E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83AB8BB81B80E5530062010E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		83AB8BBA1B80E5530062010E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		83AB8BC31B83633A0062010E /* Chip8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chip8.swift; sourceTree = "<group>"; };
+		83AB8BC71B836E690062010E /* Graphics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graphics.swift; sourceTree = "<group>"; };
+		83AB8BC91B836E740062010E /* Sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
+		83AB8BCB1B836E7C0062010E /* Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keyboard.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +89,10 @@
 		83AB8BC21B80E66E0062010E /* Chip8 */ = {
 			isa = PBXGroup;
 			children = (
+				83AB8BC31B83633A0062010E /* Chip8.swift */,
+				83AB8BC71B836E690062010E /* Graphics.swift */,
+				83AB8BC91B836E740062010E /* Sound.swift */,
+				83AB8BCB1B836E7C0062010E /* Keyboard.swift */,
 			);
 			name = Chip8;
 			sourceTree = "<group>";
@@ -154,7 +166,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83AB8BCA1B836E740062010E /* Sound.swift in Sources */,
+				83AB8BC41B83633A0062010E /* Chip8.swift in Sources */,
 				83AB8BB41B80E5530062010E /* ViewController.swift in Sources */,
+				83AB8BC81B836E690062010E /* Graphics.swift in Sources */,
+				83AB8BCC1B836E7C0062010E /* Keyboard.swift in Sources */,
 				83AB8BB21B80E5530062010E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
