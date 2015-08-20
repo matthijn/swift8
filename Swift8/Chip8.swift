@@ -81,7 +81,6 @@ class Chip8
             
             // JP_ADDR (jump to a memory address)
             0x1000: { arg in
-                // Set the program counter to jump
                 self.pc = arg
             },
             
@@ -92,29 +91,175 @@ class Chip8
                 self.stack[self.sp] = self.pc
             },
             
-            // SE_V_BYTE ( skip next instruction if register equals value )
+            // SE_V_BYTE (skip next instruction if register equals value)
             0x3000: { arg in
-                
+                let register = arg & 0x100
+                let value = arg & 0x011
+
+                if(self.V[register] == value)
+                {
+                    self.pc++
+                }
             },
+            
+            // SNE_V_BYTE (skip next instruction if register does not equals value)
+            0x4000: { arg in
+                let registerX = arg & 0x100
+                let value = arg & 0x11
+                
+                if(self.V[registerX] != value)
+                {
+                    self.pc++
+                }
+            },
+            
+            // SE_V_V (skip next instruction if register equals other register)
+            0x5000: { arg in
+                let registerX = arg & 0x10
+                let registerY = arg & 0x1
+
+                if(self.V[registerX] == self.V[registerY])
+                {
+                    self.pc++
+                }
+            },
+            
+            // LD_V_BYTE (set register with value)
+            0x6000: { arg in
+                let registerX = arg & 0x100
+                let value = arg & 0x11
+
+                self.V[registerX] = value;
+            },
+            
+            // ADD_V_BYTE (add value to register v)
+            0x7000: { arg in
+                let registerX = arg & 0x100
+                let value = arg & 0x11
+                let currentValue = self.V[registerX]
+                
+                // Adding the value, but wrapping around since we can't store more in a byte
+                self.V[registerX] = (currentValue + value) % 256
+            },
+            
+            // OR_V_V (OR two registers and store result in first register)
+            0x8001: { arg in
+                let registerX = arg & 0x10
+                let registerY = arg & 0x1
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                self.V[registerX] = valueX | valueY
+            },
+            
+            // AND_V_V (AND two registers and store result in first register)
+            0x8002: { arg in
+                let registerX = arg & 0x10
+                let registerY = arg & 0x1
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                self.V[registerX] = valueX & valueY
+            },
+            
+            // XOR_V_V (XOR two registers and store result in first register)
+            0x8003: { arg in
+                let registerX = arg & 0x10
+                let registerY = arg & 0x1
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                self.V[registerX] = valueX ^ valueY
+            },
+            
+            // ADD_V_V (Add two registers and store result in first register carry flag is set)
+            0x8004: { arg in
+                let registerX = arg & 0x10
+                let registerY = arg & 0x1
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                // Determine overflowed value
+                let sum = valueX + valueY
+                
+                // Set the flag if needed
+                self.V[0xF] = (sum > 255) ? 1 : 0
+                
+                // Store wrapped value
+                self.V[registerX] = sum % 256
+            },
+            
+            // SUB_V_V (Subtract the second register from the first and store result in first register, borrow flag is set when there is no borrow)
+            0x8005: { arg in
+                let registerX = arg & 0x10
+                let registerY = arg & 0x1
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                let result = valueX - valueY
+                
+                self.V[0xF] = (result < 0) ? 0 : 1
+                
+                self.V[registerX] = result % 256
+            },
+            
+            // SHR_V (Shift the first register right by one the flag will contain the LSB before the shift (last nibble is ignored in opcode))
+            0x8006: { arg in
+                let registerX = arg & 0x10
+                let valueX = self.V[registerX]
+                
+                // Set the flag
+                let lsb = valueX & 0x1
+                self.V[0xF] = lsb
+                
+                // Shift
+                self.V[registerX] = valueX >> 1
+            },
+            
+            // SUBN_V_V (Subtract the first register from the second register and store the result in the first register, borrow flag is set when there is no borrow)
+            0x8007: { arg in
+                let registerX = arg & 0x10
+                let registerY = arg & 0x1
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                let result = valueY - valueX
+                
+                self.V[0xF] = (result < 0) ? 0 : 1
+                
+                self.V[registerX] = result % 256
+            },
+            
+            // SHL_V (Shift the first register left by one the flag will containt the MSB before the shift (last nibble is ignored in opcode))
+            0x800E: { arg in
+                let registerX = arg & 0x10
+                let valueX = self.V[registerX]
+                
+                // Set the flag
+                let msb = valueX & 0b10000000
+                self.V[0xF] = msb
+                
+                // Shift
+                self.V[registerX] = valueX << 1
+            },
+            
+            // LD_V_V (copy register to another register)
+            0x8000: { arg in
+                let registerX = arg & 0x10
+                let registerY = arg & 0x1
+                
+                self.V[registerX] = self.V[registerY]
+            },            
+            
         ]
     }()
 
-//    let mapping = [
-//
-
-//        0x4000: "sne_v_byte", // skip next instruction if register not equals value
-//        0x5000: "se_v_v", // skip next instruction if register equals other register
-//        0x6000: "ld_v_byte", // set register with value
-//        0x7000: "add_v_byte", // add value to register v
-//        0x8001: "or_v_v", // OR two registers and store result in first register
-//        0x8002: "and_v_v", // AND two registers and store result in first register
-//        0x8003: "xor_v_v", // XOR two registers and store result in first register
-//        0x8004: "add_v_v", // Add two registers and store result in first register carry flag is set
-//        0x8005: "sub_v_v", // Subtract the second register from the first and store result in first register, borrow flag is set when there is no borrow
-//        0x8006: "shr_v", // Shift the first register right by one the flag will contain the LSB before the shift (last nibble is ignored in opcode)
-//        0x8007: "subn_v_v", // Subtract the first register from the second register and store the result in the first register, borrow flag is set when there is no borrow
-//        0x800E: "shl_v", // Shift the first register left by one the flag will containt the RSB before the shift (last nibble is ignored in opcode)
-//        0x8000: "ld_v_v", // copy register to another register
 //        0x9000: "sne_v_v", // Skip next instruction if the first register does not match the second register
 //        0xA000: "ld_i_addr", // The I register is set with the address
 //        0xB000: "jp_v0_addr", // Jump to the address of addr + v0
@@ -140,8 +285,6 @@ class Chip8
         self.graphics = graphics
         self.sound = sound
         self.keyboard = keyboard
-
-        super.init()
 
         self.resest()
     }
