@@ -33,10 +33,10 @@ class Chip8
     var pc : Int = 0
     
     // Used for delaying things, counts down from any non zero number at 60hz
-    var delayTimer : UInt8 = 0
+    var delayTimer : Int = 0
     
     // Used for sounding a beep when it is non zero, counts down at 60hz
-    var soundTimer : UInt8 = 0
+    var soundTimer : Int = 0
     
     // Flag to stop looping if needed
     var isLooping = false
@@ -257,28 +257,107 @@ class Chip8
                 self.V[registerX] = self.V[registerY]
             },            
             
+            // SNE_V_V (Skip next instruction if the first register does not match the second register)
+            0x9000: { arg in
+                let registerX = arg & 0x10
+                let registerY = arg & 0x1
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                if(valueX != valueY)
+                {
+                    self.pc++
+                }
+            },
+            
+            // LD_I_ADDR (The I register is set with the ADDR)
+            0xA000: { arg in
+                self.I = arg
+            },
+
+            // JP_V0_ADDR (Jump to the address of ADDR + V0)
+            0xB000: { arg in
+                let value0 = self.V[0];
+                self.pc = value0 + arg
+            },
+            
+            // RND_V_BYTE (Generates a random byte value which then AND is applied to that value based on the byte parameter and placed in the register V)
+            0xC000: { arg in
+                let random = Int(arc4random_uniform(256))
+                
+                let registerX = arg & 0x100
+                let value = arg & 0x11
+                
+                self.V[registerX] = random & value
+            },
+            
+            // DRW_V_V_N (Draw sprite of length N on memory address I on coordinates of the passed registers VF is set on collision)
+            0xD000: { arg in
+                
+            },
+          
+            // SKP_V (Skips the next instruction if the key which represents the value in register V is pressed)
+            0xE09E: { arg in
+                
+            },
+            
+            // SKNP_V (Skips the next instruction if the key which represents the valine in register V is not pressed)
+            0xE0A1: { arg in
+                
+            },
+            
+            // LD_V_DT (Set the register V to the value in dt)
+            0xF007: { arg in
+                let registerX = arg & 0x1
+                self.V[registerX] = self.delayTimer
+            },
+            
+            // LD_V_K  (Set the register V to the value of the keypress by the keyboard (will wait for keypress))
+            0xF00A: { arg in
+                
+            },
+            
+            // LD_DT_V (Set the delayTimer to the value in register V)
+            0xF015: { arg in
+                let registerX = arg & 0x1
+                self.delayTimer = self.V[registerX]
+            },
+            
+            // LD_ST_V (Set the soundTimer to the value in register V)
+            0xF018: { arg in
+                let registerX = arg & 0x1
+                self.soundTimer = self.V[registerX]
+            },
+            
+            // ADD_I_V (I and the register are added and stored in I)
+            0xF01E: { arg in
+                let registerX = arg & 0x1
+                self.I = self.I + self.V[registerX]
+            },
+            
+            // LD_F_V (I is set to the address of the corresponding font block representing the value in register V)
+            0xF029: { arg in
+                
+            },
+            
+            // LD_B_V (Stores the binary decimal representation of the value of register V in I)
+            0xF033: { arg in
+                
+            },
+            
+            // LD_I_V (Stores the registers v0 to v(x) starting in memory beginning at location I)
+            0xF055: { arg in
+                
+            },
+            
+            // LD_V_I (Reads from memory location I and stores it in registers V0 to V(x))
+            0xF066: { arg in
+                
+            }
         ]
     }()
 
-//        0x9000: "sne_v_v", // Skip next instruction if the first register does not match the second register
-//        0xA000: "ld_i_addr", // The I register is set with the address
-//        0xB000: "jp_v0_addr", // Jump to the address of addr + v0
-//        0xC000: "rnd_v_byte", // Generates a random byte value which then AND is applied to that value based on the byte parameter and placed in the register v
-//        0xD000: "drw_v_v_n", // Draw sprite of length n on memory address I on coordinates of the passed registers VF is set on collision
-//        0xE09E: "skp_v", // Skips the next instruction if the key which represents the value in register v is pressed
-//        0xE0A1: "sknp_v", // Skips the next instruction if the key which represents the valine in register v is not pressed
-//        0xF007: "ld_v_dt", // Set the register v to the value in dt
-//        0xF00A: "ld_v_k", // Set the register v to the value of the keypress by the keyboard (will wait for keypress)
-//        0xF015: "ld_dt_v", // Set the delay timer to the value in register v
-//        0xF018: "ld_st_v", // Set the sound timer to the value in register v
-//        0xF01E: "add_i_v", // The results of I and v are added and stored in i
-//        0xF029: "ld_f_v", // I is set to the address of the corresponding font block representing the value in register v
-//        0xF033: "ld_b_v", // Stores the binary decimal representation of the value of register v in I
-//        0xF055: "ld_i_v", // Stores the registers v0 to v(x) starting in memory location i,
-//        0xF066: "ld_v_i" // Reads from memory location i and stores it in registers V0 to v(x)
-////        0x0000: "sys", // Todo: (not required it seems)
-//    ]
-    
     // Hooks up the peripherals to the Chip8 system
     init(graphics: Graphics, sound: Sound, keyboard: Keyboard)
     {
@@ -343,7 +422,7 @@ class Chip8
     {
         // Handle the next instruction
         self.tickInstruction()
-return
+
         // Make sure the timers countdown
         self.countdownTimers()
         
