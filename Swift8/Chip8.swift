@@ -10,9 +10,37 @@ import Foundation
 
 class Chip8
 {
+    // Total memory size
     static let MemorySize = 0x1000
+    
+    // Total register size
     static let RegisterSize = 0xF
+    
+    // Total stack size
     static let StackSize = 0xF
+    
+    // Holds the font data that will be loaded in memory to display numbers on screen
+    static let FontSpriteData : [UInt8] = [
+        0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+        0x20, 0x60, 0x20, 0x20, 0x70, // 1
+        0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+        0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+        0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+        0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+        0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+        0xF0, 0x10, 0x20, 0x40, 0x40, // 7
+        0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+        0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+        0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+        0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+        0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+        0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+        0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+        0xF0, 0x80, 0xF0, 0x80, 0x80 // F
+    ]
+    
+    // The location from where the fonts are going to be stored in memory
+    static let FontMemoryLocation : UInt16 = 0
     
     // Will hold the memory
     var memory = [UInt8](count: Chip8.MemorySize, repeatedValue: 0)
@@ -309,7 +337,7 @@ class Chip8
             
             // LD_V_DT (Set the register V to the value in dt)
             0xF007: { arg in
-                let registerX = Int(arg & 0x1)
+                let registerX = Int(arg & 0x10)
                 self.V[registerX] = self.delayTimer
             },
             
@@ -326,19 +354,26 @@ class Chip8
             
             // LD_ST_V (Set the soundTimer to the value in register V)
             0xF018: { arg in
-                let registerX = Int(arg & 0x1)
+                let registerX = Int(arg)
                 self.soundTimer = self.V[registerX]
             },
             
             // ADD_I_V (I and the register are added and stored in I)
             0xF01E: { arg in
-                let registerX = Int(arg & 0x1)
+                let registerX = Int(arg)
                 self.I = self.I + UInt16(self.V[registerX])
             },
             
             // LD_F_V (I is set to the address of the corresponding font block representing the value in register V)
             0xF029: { arg in
-                // Todo:
+                let registerX = Int(arg)
+                let valueX = self.V[registerX]
+                
+                // Get the memory offset for this hex number (a single font consists of 5 bytes)
+                let memoryOffset = Chip8.FontMemoryLocation + UInt16(valueX * 5)
+                
+                // And point to the beginning of the font
+                self.I = memoryOffset
             },
             
             // LD_B_V (Stores the binary decimal representation of the value of register V in I)
@@ -427,8 +462,11 @@ class Chip8
         self.pc = 0
         self.delayTimer = 0
         self.soundTimer = 0
+        
+        // And load the fonts
+        self.loadFonts()
     }
-    
+
     /**
      * Starts the main loop
      */
@@ -454,6 +492,18 @@ class Chip8
     func stopLoop()
     {
         self.isLooping = false
+    }
+    
+    /**
+     * Loads the font sprite information in memory
+     */
+    private func loadFonts()
+    {
+        for (index, fontByte) in Chip8.FontSpriteData.enumerate()
+        {
+            let indexWithOffset = index + Chip8.FontMemoryLocation
+            self.memory[indexWithOffset] = fontByte
+        }
     }
     
     /**
