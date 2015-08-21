@@ -8,25 +8,34 @@
 
 import Cocoa
 
-class ViewController: NSViewController
+class Chip8ViewController: NSViewController
 {
-
+    
+    var chip8View : Chip8View {
+        get {
+            return self.view as! Chip8View
+        }
+    }
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        
-        let chip = Chip8(graphics: Graphics(), sound: Sound(), keyboard: Keyboard())
+
+        let chip = Chip8(graphics: Graphics(), sound: Sound(), keyboard: self.chip8View.keyboard)
         chip.startLoop();
 
     }
+    
 
     override var representedObject: AnyObject?
     {
         didSet
         {
+            print(self.view.window)
             // Update the view, if already loaded.
         }
     }
+
 
 
 }

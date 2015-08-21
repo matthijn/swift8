@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		839D2F061B876E2A008623FC /* Chip8View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D2F051B876E2A008623FC /* Chip8View.swift */; };
 		83AB8BB21B80E5530062010E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BB11B80E5530062010E /* AppDelegate.swift */; };
-		83AB8BB41B80E5530062010E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BB31B80E5530062010E /* ViewController.swift */; };
+		83AB8BB41B80E5530062010E /* Chip8ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BB31B80E5530062010E /* Chip8ViewController.swift */; };
 		83AB8BB61B80E5530062010E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 83AB8BB51B80E5530062010E /* Assets.xcassets */; };
 		83AB8BB91B80E5530062010E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 83AB8BB71B80E5530062010E /* Main.storyboard */; };
 		83AB8BC41B83633A0062010E /* Chip8.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BC31B83633A0062010E /* Chip8.swift */; };
@@ -18,9 +19,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		839D2F051B876E2A008623FC /* Chip8View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chip8View.swift; sourceTree = "<group>"; };
 		83AB8BAE1B80E5530062010E /* Swift8.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Swift8.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		83AB8BB11B80E5530062010E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		83AB8BB31B80E5530062010E /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		83AB8BB31B80E5530062010E /* Chip8ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chip8ViewController.swift; sourceTree = "<group>"; };
 		83AB8BB51B80E5530062010E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		83AB8BB81B80E5530062010E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		83AB8BBA1B80E5530062010E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -70,7 +72,8 @@
 			isa = PBXGroup;
 			children = (
 				83AB8BB11B80E5530062010E /* AppDelegate.swift */,
-				83AB8BB31B80E5530062010E /* ViewController.swift */,
+				83AB8BB31B80E5530062010E /* Chip8ViewController.swift */,
+				839D2F051B876E2A008623FC /* Chip8View.swift */,
 				83AB8BC11B80E6570062010E /* Resources */,
 			);
 			name = App;
@@ -168,9 +171,10 @@
 			files = (
 				83AB8BCA1B836E740062010E /* Sound.swift in Sources */,
 				83AB8BC41B83633A0062010E /* Chip8.swift in Sources */,
-				83AB8BB41B80E5530062010E /* ViewController.swift in Sources */,
+				83AB8BB41B80E5530062010E /* Chip8ViewController.swift in Sources */,
 				83AB8BC81B836E690062010E /* Graphics.swift in Sources */,
 				83AB8BCC1B836E7C0062010E /* Keyboard.swift in Sources */,
+				839D2F061B876E2A008623FC /* Chip8View.swift in Sources */,
 				83AB8BB21B80E5530062010E /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -312,6 +316,7 @@
 				83AB8BBF1B80E5530062010E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

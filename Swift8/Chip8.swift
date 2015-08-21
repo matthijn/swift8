@@ -18,27 +18,7 @@ class Chip8
     
     // Total stack size
     static let StackSize = 0xF
-    
-    // Holds the font data that will be loaded in memory to display numbers on screen
-    static let FontSpriteData : [UInt8] = [
-        0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
-        0x20, 0x60, 0x20, 0x20, 0x70, // 1
-        0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
-        0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
-        0x90, 0x90, 0xF0, 0x10, 0x10, // 4
-        0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
-        0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
-        0xF0, 0x10, 0x20, 0x40, 0x40, // 7
-        0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
-        0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
-        0xF0, 0x90, 0xF0, 0x90, 0x90, // A
-        0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
-        0xF0, 0x80, 0x80, 0x80, 0xF0, // C
-        0xE0, 0x90, 0x90, 0x90, 0xE0, // D
-        0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
-        0xF0, 0x80, 0xF0, 0x80, 0x80 // F
-    ]
-    
+
     // The location from where the fonts are going to be stored in memory
     static let FontMemoryLocation : UInt16 = 0
     
@@ -327,12 +307,24 @@ class Chip8
           
             // SKP_V (Skips the next instruction if the key which represents the value in register V is pressed)
             0xE09E: { arg in
-                // Todo:
+                let registerX = Int(arg)
+                let valueX = Int8(self.V[registerX])
+                
+                if valueX == self.keyboard.currentKey
+                {
+                    self.pc++
+                }
             },
             
             // SKNP_V (Skips the next instruction if the key which represents the valine in register V is not pressed)
             0xE0A1: { arg in
-                // Todo:
+                let registerX = Int(arg)
+                let valueX = Int8(self.V[registerX])
+                
+                if valueX != self.keyboard.currentKey
+                {
+                    self.pc++
+                }
             },
             
             // LD_V_DT (Set the register V to the value in dt)
@@ -343,7 +335,18 @@ class Chip8
             
             // LD_V_K  (Set the register V to the value of the keypress by the keyboard (will wait for keypress))
             0xF00A: { arg in
-                // Todo:
+                
+                let registerX = Int(arg & 0x10)
+
+                repeat
+                {
+                    if(self.keyboard.currentKey != -1)
+                    {
+                        self.V[registerX] = UInt8(self.keyboard.currentKey)
+                    }
+                }
+                while(self.keyboard.currentKey == -1)
+
             },
             
             // LD_DT_V (Set the delayTimer to the value in register V)
@@ -473,16 +476,6 @@ class Chip8
     func startLoop()
     {
         self.isLooping = true
-        
-        // Putting some stuff in memory
-        self.memory[0] = 0x00
-        self.memory[1] = 0xE0
-        self.memory[2] = 0x00
-        self.memory[3] = 0xEE
-        self.memory[4] = 0x11
-        self.memory[5] = 0x00
-
-
         self.loop()
     }
     
@@ -499,9 +492,9 @@ class Chip8
      */
     private func loadFonts()
     {
-        for (index, fontByte) in Chip8.FontSpriteData.enumerate()
+        for (index, fontByte) in Graphics.FontSpriteData.enumerate()
         {
-            let indexWithOffset = index + Chip8.FontMemoryLocation
+            let indexWithOffset = Int(UInt16(index) + Chip8.FontMemoryLocation)
             self.memory[indexWithOffset] = fontByte
         }
     }
@@ -521,8 +514,7 @@ class Chip8
         self.makeNoise()
         
         // Determine if we should continue the loop
-//        if(self.isLooping)
-        if(self.pc < 6)
+        if(self.isLooping)
         {
             // Delaying one 60th of a second
             let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(1/60 * Double(NSEC_PER_SEC)))
