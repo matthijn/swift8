@@ -143,8 +143,8 @@ class Chip8
             
             // SE_V_V (skip next instruction if register equals other register)
             0x5000: { arg in
-                let registerX = Int(arg & 0x10)
-                let registerY = Int(arg & 0x1)
+                let registerX = Int(arg & 0x100)
+                let registerY = Int(arg & 0x10)
 
                 if(self.V[registerX] == self.V[registerY])
                 {
@@ -279,16 +279,16 @@ class Chip8
             
             // LD_V_V (copy register to another register)
             0x8000: { arg in
-                let registerX = Int(arg & 0x10)
-                let registerY = Int(arg & 0x1)
+                let registerX = Int(arg & 0x100)
+                let registerY = Int(arg & 0x10)
                 
                 self.V[registerX] = self.V[registerY]
             },            
             
             // SNE_V_V (Skip next instruction if the first register does not match the second register)
             0x9000: { arg in
-                let registerX = Int(arg & 0x10)
-                let registerY = Int(arg & 0x1)
+                let registerX = Int(arg & 0x100)
+                let registerY = Int(arg & 0x10)
                 
                 let valueX = self.V[registerX]
                 let valueY = self.V[registerY]
@@ -348,7 +348,7 @@ class Chip8
             
             // LD_DT_V (Set the delayTimer to the value in register V)
             0xF015: { arg in
-                let registerX = Int(arg & 0x1)
+                let registerX = Int(arg)
                 self.delayTimer = self.V[registerX]
             },
             
