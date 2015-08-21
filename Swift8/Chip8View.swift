@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class Chip8View : NSView
+class Chip8View : NSView, Chip8Graphics
 {
     let keyboard = Keyboard()
     
@@ -17,6 +17,24 @@ class Chip8View : NSView
         get {
             return true
         }
+    }
+    
+    // MARK: Chip8Graphics
+    
+    /**
+     * Clear the screen 
+     */
+    func clear()
+    {
+        
+    }
+    
+    /**
+     * Draw sprite data on location, removing existing color if written again at the same location, returning true if that is the case
+     */
+    func draw(spriteData: ArraySlice<UInt8>, x: UInt8, y: UInt8) -> Bool
+    {
+        return false
     }
     
     // MARK: Keyboard keys forwarding

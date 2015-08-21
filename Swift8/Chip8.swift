@@ -75,7 +75,7 @@ class Chip8
             
             // CLS (clear the display)
             0x00E0: { arg in
-                // Todo:
+                self.graphics.clear()
             },
             
             // RET (return from a subroutine)
@@ -302,7 +302,31 @@ class Chip8
             
             // DRW_V_V_N (Draw sprite of length N on memory address I on coordinates of the passed registers VF is set on collision)
             0xD000: { arg in
-                // Todo:
+                let registerX = Int(arg & 0x100)
+                let registerY = Int(arg & 0x10)
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                let spriteSize = UInt16(arg & 0x1)
+                
+                let start = Int(self.I)
+                let end = Int(self.I + spriteSize)
+                
+                // Get the part of the memory with the sprite
+                let memorySlice = self.memory[start...end]
+                
+                // Draw the graphics
+                
+                // Returns wether the "cleared a pixel while drawing" flag should be true
+                if self.graphics.draw(memorySlice, x: valueX, y: valueY)
+                {
+                    self.V[0xF] = 1
+                }
+                else
+                {
+                    self.V[0xF] = 0
+                }
             },
           
             // SKP_V (Skips the next instruction if the key which represents the value in register V is pressed)
@@ -517,7 +541,7 @@ class Chip8
         if(self.isLooping)
         {
             // Delaying one 60th of a second
-            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(1/60 * Double(NSEC_PER_SEC)))
+            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(1.0/60.0 * Double(NSEC_PER_SEC)))
             
             // And call self recursively after that delay
             dispatch_after(delay, dispatch_get_main_queue(), self.loop)
@@ -567,7 +591,7 @@ class Chip8
     {
         if(self.soundTimer > 0)
         {
-            self.sound.bleep()
+            self.sound.beep(1.0/60.0)
         }
     }
 

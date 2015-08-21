@@ -21,9 +21,17 @@ class Chip8ViewController: NSViewController
     {
         super.viewDidLoad()
 
-        let chip = Chip8(graphics: Graphics(), sound: Sound(), keyboard: self.chip8View.keyboard)
+        // The UIView is the first responder, so hooking the keyboard up from there
+        let keyboard = self.chip8View.keyboard;
+        
+        // Creating graphics through the UIView
+        let graphics = Graphics(graphicsDelegate: self.chip8View)
+        
+        // Create the chip system
+        let chip = Chip8(graphics: graphics, sound: Sound(), keyboard: keyboard)
+        
+        // And start the loop
         chip.startLoop();
-
     }
     
 

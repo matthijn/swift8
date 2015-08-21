@@ -8,7 +8,19 @@
 
 import Foundation
 
-class Graphics
+protocol Chip8Graphics
+{
+    
+    // Clear the screen
+    func clear()
+    
+    
+    // Draw sprite data on given location, return true if it overwrites existing information
+    func draw(spriteData: ArraySlice<UInt8>, x: UInt8, y: UInt8) -> Bool
+    
+}
+
+class Graphics : Chip8Graphics
 {
     
     // Holds the font data that will be loaded in memory to display numbers on screen
@@ -30,5 +42,30 @@ class Graphics
         0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
         0xF0, 0x80, 0xF0, 0x80, 0x80 // F
     ]
+    
+    // Forwarding the drawing calls to another class, so it can be swapped for different type (e.g UIView, OpenGL, ASCII)
+    let delegate : Chip8Graphics
+
+    init(graphicsDelegate: Chip8Graphics)
+    {
+        self.delegate = graphicsDelegate
+    }
+    
+    /**
+     * Clear everything that is displayed
+     */
+    func clear()
+    {
+        self.delegate.clear()
+    }
+    
+    /**
+     * Draw the sprite data on the given location
+     * @return Bool if the sprite overlaps with existing sprite and overwrites it partially (inverting) true is returned, else false
+     */
+    func draw(spriteData: ArraySlice<UInt8>, x: UInt8, y: UInt8) -> Bool
+    {
+        return self.delegate.draw(spriteData, x: x, y: y)
+    }
 
 }

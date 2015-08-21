@@ -12,11 +12,11 @@ class Sound
 {
     
     /*
-     * Play a super short bleep
+     * Play a beep of duration
      */
-    func bleep()
+    func beep(duration: Double)
     {
-        
+        // Todo
     }
     
 }
