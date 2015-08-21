@@ -67,7 +67,7 @@ class Chip8
             
             // CLS (clear the display)
             0x00E0: { arg in
-                print("Clear \(arg)")
+                // Todo:
             },
             
             // RET (return from a subroutine)
@@ -294,17 +294,17 @@ class Chip8
             
             // DRW_V_V_N (Draw sprite of length N on memory address I on coordinates of the passed registers VF is set on collision)
             0xD000: { arg in
-                
+                // Todo:
             },
           
             // SKP_V (Skips the next instruction if the key which represents the value in register V is pressed)
             0xE09E: { arg in
-                
+                // Todo:
             },
             
             // SKNP_V (Skips the next instruction if the key which represents the valine in register V is not pressed)
             0xE0A1: { arg in
-                
+                // Todo:
             },
             
             // LD_V_DT (Set the register V to the value in dt)
@@ -315,7 +315,7 @@ class Chip8
             
             // LD_V_K  (Set the register V to the value of the keypress by the keyboard (will wait for keypress))
             0xF00A: { arg in
-                
+                // Todo:
             },
             
             // LD_DT_V (Set the delayTimer to the value in register V)
@@ -338,22 +338,63 @@ class Chip8
             
             // LD_F_V (I is set to the address of the corresponding font block representing the value in register V)
             0xF029: { arg in
-                
+                // Todo:
             },
             
             // LD_B_V (Stores the binary decimal representation of the value of register V in I)
             0xF033: { arg in
+                let registerX = Int(arg)
+                var valueX = self.V[registerX]
                 
+                // With the binary decimal representation (unpacked) every single digit of a number is stored in a seperate byte
+                // Number can be max three digits long (8 bits)
+                for var i = 2; i >= 0; i--
+                {
+                    // Getting the current smallest digit of the whole number
+                    let currentValue = valueX % 10
+                    
+                    // Determine where to store
+                    let index = Int(self.I) + i
+
+                    // Store it
+                    self.memory[index] = currentValue
+                    
+                    // Divide by ten zo in the next run the second smallest digit is the new smallest digit
+                    valueX /= 10
+                }
             },
             
             // LD_I_V (Stores the registers v0 to v(x) starting in memory beginning at location I)
             0xF055: { arg in
+                let registerX = Int(arg)
                 
+                for var currentRegister = 0; currentRegister <= registerX; currentRegister++
+                {
+                    // Get byte from register
+                    let registerByte = self.V[currentRegister]
+                    
+                    // Store it in memory
+                    self.memory[Int(self.I)] = registerByte
+                    
+                    self.I++
+                }
             },
             
             // LD_V_I (Reads from memory location I and stores it in registers V0 to V(x))
-            0xF066: { arg in
+            0xF065: { arg in
+                let registerX = Int(arg)
                 
+                for var currentRegister = 0; currentRegister <= registerX; currentRegister++
+                {
+                    // Get the byte from memory
+                    let memoryByte = self.memory[Int(self.I)]
+                    
+                    // Store it in current register
+                    self.V[currentRegister] = memoryByte
+                    
+                    // And increment the I register memory address
+                    self.I++
+                }
             }
         ]
     }()
@@ -446,8 +487,8 @@ class Chip8
      */
     private func tickInstruction()
     {
-        // Get current block from memory everything is stored in blocks of two bytes where the first part is the opcode and the second part the parameters. The opcode can be multiple nibbles long
-        let memoryBlock = UInt16(self.memory[Int(self.pc)] << 8 | self.memory[Int(self.pc + 1)])
+        // Get current block to run from memory everything which is stored in blocks of two bytes containing both the opcode and "parameters"
+        let memoryBlock = UInt16(self.memory[Int(self.pc)]) << 8 | UInt16(self.memory[Int(self.pc + 1)])
 
         print("Memory value at PC \(self.pc) \(String(memoryBlock, radix: 16))")
         
@@ -478,7 +519,7 @@ class Chip8
     }
 
     /**
-     * Determines if the attached sound perpherals should make noise
+     * Determines if the attached sound peripherals should make noise
      */
     private func makeNoise()
     {
