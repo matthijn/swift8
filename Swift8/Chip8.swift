@@ -15,28 +15,28 @@ class Chip8
     static let StackSize = 0xF
     
     // Will hold the memory
-    var memory = [Int](count: Chip8.MemorySize, repeatedValue: 0)
+    var memory = [UInt8](count: Chip8.MemorySize, repeatedValue: 0)
     
     // The register (last item in the register (VF) doubles as carry flag)
-    var V = [Int](count: Chip8.RegisterSize, repeatedValue: 0)
+    var V = [UInt8](count: Chip8.RegisterSize, repeatedValue: 0)
     
     // The address register
-    var I : Int = 0
+    var I : UInt16 = 0
     
     // The stack
-    var stack = [Int](count: Chip8.StackSize, repeatedValue: 0)
+    var stack = [UInt16](count: Chip8.StackSize, repeatedValue: 0)
 
     // Points to the current item in the stack
-    var sp : Int = 0
+    var sp : UInt8 = 0
     
     // The program counter (e.g holds current executing memory address)
-    var pc : Int = 0
+    var pc : UInt16 = 0
     
     // Used for delaying things, counts down from any non zero number at 60hz
-    var delayTimer : Int = 0
+    var delayTimer : UInt8 = 0
     
     // Used for sounding a beep when it is non zero, counts down at 60hz
-    var soundTimer : Int = 0
+    var soundTimer : UInt8 = 0
     
     // Flag to stop looping if needed
     var isLooping = false
@@ -61,7 +61,7 @@ class Chip8
     
     // Since we are checking on the AND value, order here is important
 
-    lazy var mapping : [Int: ((Int) -> Void)] = {
+    lazy var mapping : [UInt16: ((UInt16) -> Void)] = {
         
         return [
             
@@ -73,8 +73,8 @@ class Chip8
             // RET (return from a subroutine)
             0x00EE: { arg in
                 // Set the program counter to the current item on the stack
-                self.pc = self.stack[self.sp]
-                
+                self.pc = self.stack[Int(self.sp)]
+
                 // Decrement stack pointer
                 self.sp--
             },
@@ -88,13 +88,13 @@ class Chip8
             0x2000: { arg in
                 // Place current address on top of stack
                 self.sp++
-                self.stack[self.sp] = self.pc
+                self.stack[Int(self.sp)] = self.pc
             },
             
             // SE_V_BYTE (skip next instruction if register equals value)
             0x3000: { arg in
-                let register = arg & 0x100
-                let value = arg & 0x011
+                let register = Int(arg & 0x100)
+                let value = UInt8(arg & 0x011)
 
                 if(self.V[register] == value)
                 {
@@ -104,8 +104,8 @@ class Chip8
             
             // SNE_V_BYTE (skip next instruction if register does not equals value)
             0x4000: { arg in
-                let registerX = arg & 0x100
-                let value = arg & 0x11
+                let registerX = Int(arg & 0x100)
+                let value = UInt8(arg & 0x11)
                 
                 if(self.V[registerX] != value)
                 {
@@ -115,8 +115,8 @@ class Chip8
             
             // SE_V_V (skip next instruction if register equals other register)
             0x5000: { arg in
-                let registerX = arg & 0x10
-                let registerY = arg & 0x1
+                let registerX = Int(arg & 0x10)
+                let registerY = Int(arg & 0x1)
 
                 if(self.V[registerX] == self.V[registerY])
                 {
@@ -126,26 +126,26 @@ class Chip8
             
             // LD_V_BYTE (set register with value)
             0x6000: { arg in
-                let registerX = arg & 0x100
-                let value = arg & 0x11
+                let registerX = Int(arg & 0x100)
+                let value = UInt8(arg & 0x11)
 
                 self.V[registerX] = value;
             },
             
             // ADD_V_BYTE (add value to register v)
             0x7000: { arg in
-                let registerX = arg & 0x100
-                let value = arg & 0x11
+                let registerX = Int(arg & 0x100)
+                let value = UInt8(arg & 0x11)
                 let currentValue = self.V[registerX]
                 
                 // Adding the value, but wrapping around since we can't store more in a byte
-                self.V[registerX] = (currentValue + value) % 256
+                self.V[registerX] = UInt8(Int((currentValue + value)) % 256)
             },
             
             // OR_V_V (OR two registers and store result in first register)
             0x8001: { arg in
-                let registerX = arg & 0x10
-                let registerY = arg & 0x1
+                let registerX = Int(arg & 0x10)
+                let registerY = Int(arg & 0x1)
                 
                 let valueX = self.V[registerX]
                 let valueY = self.V[registerY]
@@ -155,8 +155,8 @@ class Chip8
             
             // AND_V_V (AND two registers and store result in first register)
             0x8002: { arg in
-                let registerX = arg & 0x10
-                let registerY = arg & 0x1
+                let registerX = Int(arg & 0x10)
+                let registerY = Int(arg & 0x1)
                 
                 let valueX = self.V[registerX]
                 let valueY = self.V[registerY]
@@ -166,8 +166,8 @@ class Chip8
             
             // XOR_V_V (XOR two registers and store result in first register)
             0x8003: { arg in
-                let registerX = arg & 0x10
-                let registerY = arg & 0x1
+                let registerX = Int(arg & 0x10)
+                let registerY = Int(arg & 0x1)
                 
                 let valueX = self.V[registerX]
                 let valueY = self.V[registerY]
@@ -177,8 +177,8 @@ class Chip8
             
             // ADD_V_V (Add two registers and store result in first register carry flag is set)
             0x8004: { arg in
-                let registerX = arg & 0x10
-                let registerY = arg & 0x1
+                let registerX = Int(arg & 0x10)
+                let registerY = Int(arg & 0x1)
                 
                 let valueX = self.V[registerX]
                 let valueY = self.V[registerY]
@@ -190,13 +190,13 @@ class Chip8
                 self.V[0xF] = (sum > 255) ? 1 : 0
                 
                 // Store wrapped value
-                self.V[registerX] = sum % 256
+                self.V[registerX] = UInt8(Int(sum) % 256)
             },
             
             // SUB_V_V (Subtract the second register from the first and store result in first register, borrow flag is set when there is no borrow)
             0x8005: { arg in
-                let registerX = arg & 0x10
-                let registerY = arg & 0x1
+                let registerX = Int(arg & 0x10)
+                let registerY = Int(arg & 0x1)
                 
                 let valueX = self.V[registerX]
                 let valueY = self.V[registerY]
@@ -205,12 +205,12 @@ class Chip8
                 
                 self.V[0xF] = (result < 0) ? 0 : 1
                 
-                self.V[registerX] = result % 256
+                self.V[registerX] = UInt8(Int(result) % 256)
             },
             
             // SHR_V (Shift the first register right by one the flag will contain the LSB before the shift (last nibble is ignored in opcode))
             0x8006: { arg in
-                let registerX = arg & 0x10
+                let registerX = Int(arg & 0x10)
                 let valueX = self.V[registerX]
                 
                 // Set the flag
@@ -223,8 +223,8 @@ class Chip8
             
             // SUBN_V_V (Subtract the first register from the second register and store the result in the first register, borrow flag is set when there is no borrow)
             0x8007: { arg in
-                let registerX = arg & 0x10
-                let registerY = arg & 0x1
+                let registerX = Int(arg & 0x10)
+                let registerY = Int(arg & 0x1)
                 
                 let valueX = self.V[registerX]
                 let valueY = self.V[registerY]
@@ -233,12 +233,12 @@ class Chip8
                 
                 self.V[0xF] = (result < 0) ? 0 : 1
                 
-                self.V[registerX] = result % 256
+                self.V[registerX] = UInt8(Int(result) % 256)
             },
             
             // SHL_V (Shift the first register left by one the flag will containt the MSB before the shift (last nibble is ignored in opcode))
             0x800E: { arg in
-                let registerX = arg & 0x10
+                let registerX = Int(arg & 0x10)
                 let valueX = self.V[registerX]
                 
                 // Set the flag
@@ -251,16 +251,16 @@ class Chip8
             
             // LD_V_V (copy register to another register)
             0x8000: { arg in
-                let registerX = arg & 0x10
-                let registerY = arg & 0x1
+                let registerX = Int(arg & 0x10)
+                let registerY = Int(arg & 0x1)
                 
                 self.V[registerX] = self.V[registerY]
             },            
             
             // SNE_V_V (Skip next instruction if the first register does not match the second register)
             0x9000: { arg in
-                let registerX = arg & 0x10
-                let registerY = arg & 0x1
+                let registerX = Int(arg & 0x10)
+                let registerY = Int(arg & 0x1)
                 
                 let valueX = self.V[registerX]
                 let valueY = self.V[registerY]
@@ -279,15 +279,15 @@ class Chip8
             // JP_V0_ADDR (Jump to the address of ADDR + V0)
             0xB000: { arg in
                 let value0 = self.V[0];
-                self.pc = value0 + arg
+                self.pc = UInt16(value0) + arg
             },
             
             // RND_V_BYTE (Generates a random byte value which then AND is applied to that value based on the byte parameter and placed in the register V)
             0xC000: { arg in
-                let random = Int(arc4random_uniform(256))
+                let random = UInt8(arc4random_uniform(256))
                 
-                let registerX = arg & 0x100
-                let value = arg & 0x11
+                let registerX = Int(arg & 0x100)
+                let value = UInt8(arg & 0x11)
                 
                 self.V[registerX] = random & value
             },
@@ -309,7 +309,7 @@ class Chip8
             
             // LD_V_DT (Set the register V to the value in dt)
             0xF007: { arg in
-                let registerX = arg & 0x1
+                let registerX = Int(arg & 0x1)
                 self.V[registerX] = self.delayTimer
             },
             
@@ -320,20 +320,20 @@ class Chip8
             
             // LD_DT_V (Set the delayTimer to the value in register V)
             0xF015: { arg in
-                let registerX = arg & 0x1
+                let registerX = Int(arg & 0x1)
                 self.delayTimer = self.V[registerX]
             },
             
             // LD_ST_V (Set the soundTimer to the value in register V)
             0xF018: { arg in
-                let registerX = arg & 0x1
+                let registerX = Int(arg & 0x1)
                 self.soundTimer = self.V[registerX]
             },
             
             // ADD_I_V (I and the register are added and stored in I)
             0xF01E: { arg in
-                let registerX = arg & 0x1
-                self.I = self.I + self.V[registerX]
+                let registerX = Int(arg & 0x1)
+                self.I = self.I + UInt16(self.V[registerX])
             },
             
             // LD_F_V (I is set to the address of the corresponding font block representing the value in register V)
@@ -377,11 +377,11 @@ class Chip8
         self.stopLoop()
         
         // And reset
-        self.memory = [Int](count: Chip8.MemorySize, repeatedValue: 0)
-        self.V = [Int](count: Chip8.RegisterSize, repeatedValue: 0)
+        self.memory = [UInt8](count: Chip8.MemorySize, repeatedValue: 0)
+        self.V = [UInt8](count: Chip8.RegisterSize, repeatedValue: 0)
         self.I = 0
-        self.stack = [Int](count: Chip8.StackSize, repeatedValue: 0)
-        self.sp = self.stack.count - 1
+        self.stack = [UInt16](count: Chip8.StackSize, repeatedValue: 0)
+        self.sp = UInt8(self.stack.count - 1)
         self.sp = 0
         self.pc = 0
         self.delayTimer = 0
@@ -447,7 +447,7 @@ class Chip8
     private func tickInstruction()
     {
         // Get current block from memory everything is stored in blocks of two bytes where the first part is the opcode and the second part the parameters. The opcode can be multiple nibbles long
-        let memoryBlock = self.memory[self.pc] << 8 | self.memory[self.pc + 1]
+        let memoryBlock = UInt16(self.memory[Int(self.pc)] << 8 | self.memory[Int(self.pc + 1)])
 
         print("Memory value at PC \(self.pc) \(String(memoryBlock, radix: 16))")
         
