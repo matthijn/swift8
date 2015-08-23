@@ -93,25 +93,12 @@
                                     </connections>
                                 </buttonCell>
                             </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eYB-gL-QSx">
-                                <rect key="frame" x="159" y="2" width="77" height="32"/>
-                                <animations/>
-                                <buttonCell key="cell" type="push" title="Pause" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4Mo-BH-JcZ">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <connections>
-                                        <action selector="onPauseButton:" target="XfG-lQ-9wD" id="CUR-CN-fOE"/>
-                                    </connections>
-                                </buttonCell>
-                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstItem="QRx-7N-ZCU" firstAttribute="top" secondItem="Gdf-HG-qTf" secondAttribute="bottom" constant="10" id="EW2-Qz-p7T"/>
                             <constraint firstAttribute="trailing" secondItem="Gdf-HG-qTf" secondAttribute="trailing" id="IdE-u8-EXn"/>
-                            <constraint firstItem="eYB-gL-QSx" firstAttribute="top" secondItem="Gdf-HG-qTf" secondAttribute="bottom" constant="10" id="Nji-Qj-FIQ"/>
-                            <constraint firstAttribute="bottom" secondItem="eYB-gL-QSx" secondAttribute="bottom" constant="9" id="OpT-8t-CaA"/>
                             <constraint firstItem="QRx-7N-ZCU" firstAttribute="leading" secondItem="p2M-q5-WRv" secondAttribute="trailing" constant="12" id="ZVb-Np-fYe"/>
                             <constraint firstItem="p2M-q5-WRv" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="efB-cb-N1b"/>
-                            <constraint firstItem="eYB-gL-QSx" firstAttribute="leading" secondItem="QRx-7N-ZCU" secondAttribute="trailing" constant="12" id="gWh-iS-93X"/>
                             <constraint firstItem="Gdf-HG-qTf" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="hQe-dq-z9K"/>
                             <constraint firstAttribute="bottom" secondItem="p2M-q5-WRv" secondAttribute="bottom" constant="9" id="m49-CW-bLL"/>
                             <constraint firstAttribute="bottom" secondItem="QRx-7N-ZCU" secondAttribute="bottom" constant="9" id="uDx-HA-s9p"/>
@@ -120,6 +107,8 @@
                         <animations/>
                         <connections>
                             <outlet property="canvasView" destination="Gdf-HG-qTf" id="xPh-6V-2pL"/>
+                            <outlet property="loadButton" destination="p2M-q5-WRv" id="hav-ez-AJW"/>
+                            <outlet property="resetButton" destination="QRx-7N-ZCU" id="gp5-Ra-6es"/>
                         </connections>
                     </view>
                 </viewController>

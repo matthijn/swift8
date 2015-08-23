@@ -10,12 +10,16 @@ import Cocoa
 
 class Chip8ViewController: NSViewController
 {
+ 
+    var chip : Chip8?
     
     var chip8View : Chip8View {
         get {
             return self.view as! Chip8View
         }
     }
+    
+    var loadedRom : NSData?
     
     override func viewDidLoad()
     {
@@ -28,12 +32,8 @@ class Chip8ViewController: NSViewController
         let graphics = Graphics(graphicsDelegate: self.chip8View.canvasView)
         
         // Create the chip system
-        let chip = Chip8(graphics: graphics, sound: Sound(), keyboard: keyboard)
-        
-        // And start the loop
-        chip.startLoop();
+        self.chip = Chip8(graphics: graphics, sound: Sound(), keyboard: keyboard)
     }
-    
 
     override var representedObject: AnyObject?
     {
@@ -48,18 +48,44 @@ class Chip8ViewController: NSViewController
     
     @IBAction func onLoadButton(sender: AnyObject)
     {
-    
-    }
+        // Show a file dialog
+        let openPanel = NSOpenPanel()
+        openPanel.canChooseDirectories = false
+        openPanel.canCreateDirectories = false
+        openPanel.allowsMultipleSelection = false
 
+        if openPanel.runModal() == NSOKButton
+        {
+            // Make sure a file is selected
+            if let file = openPanel.URLs.first
+            {
+                // Try to read the file
+                self.loadedRom = NSData(contentsOfFile: file.absoluteString)
+
+                if let rom = self.loadedRom
+                {
+                    // And load the data
+                    self.chip?.load(rom, autostart: true)
+                }
+                // Something went wrong, show an alert
+                else
+                {
+                    let alert = NSAlert()
+                    alert.addButtonWithTitle("OK")
+                    alert.messageText = "Could not read the selected file."
+                    alert.alertStyle = .WarningAlertStyle
+                    alert.beginSheetModalForWindow(self.view.window!, completionHandler: nil)
+                }
+            }
+        }
+    }
 
     @IBAction func onResetButton(sender: AnyObject)
     {
-    
-    }
-    
-    @IBAction func onPauseButton(sender: AnyObject)
-    {
-    
+        if let rom = self.loadedRom
+        {
+            self.chip?.load(rom, autostart: true)
+        }
     }
 
 }

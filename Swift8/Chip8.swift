@@ -22,6 +22,9 @@ class Chip8
     // The location from where the fonts are going to be stored in memory
     static let FontMemoryLocation : UInt16 = 0
     
+    // The location from where roms are loaded
+    static let RomLocation : UInt16 = 511
+    
     // Will hold the memory
     var memory = [UInt8](count: Chip8.MemorySize, repeatedValue: 0)
     
@@ -47,7 +50,7 @@ class Chip8
     var soundTimer : UInt8 = 0
     
     // Flag to stop looping if needed
-    var isLooping = false
+    var isRunning = false
     
     // The peripherals
     let graphics : Graphics
@@ -468,13 +471,38 @@ class Chip8
         self.sound = sound
         self.keyboard = keyboard
 
-        self.resest()
+        self.reset()
+    }
+    
+    /**
+     * Load data into memory
+     */
+    func load(data: NSData, autostart : Bool = true)
+    {
+        // Change to a state in which we can load
+        self.stopLoop()
+        self.reset()
+        
+        // Get all data and put it in the Chip8 memory
+        for var i = 0; i < data.length; i++
+        {
+            // Get the byte
+            let byte = data.bytes[i]
+            
+            // And move to the chip8 memory array
+            self.memory[self.RomLocation + i] = byte
+        }
+        
+        if autostart
+        {
+            self.startLoop()
+        }
     }
     
     /**
      * Resets everything to the beginning state
      */
-    func resest()
+    func reset()
     {
         // Make sure the loop is stopped
         self.stopLoop()
@@ -492,6 +520,9 @@ class Chip8
         
         // And load the fonts
         self.loadFonts()
+        
+        // Clear the screen
+        self.graphics.clear()
     }
 
     /**
@@ -499,7 +530,7 @@ class Chip8
      */
     func startLoop()
     {
-        self.isLooping = true
+        self.isRunning = true
         self.loop()
     }
     
@@ -508,7 +539,7 @@ class Chip8
     */
     func stopLoop()
     {
-        self.isLooping = false
+        self.isRunning = false
     }
     
     /**
@@ -538,7 +569,7 @@ class Chip8
         self.makeNoise()
         
         // Determine if we should continue the loop
-        if(self.isLooping)
+        if(self.isRunning)
         {
             // Delaying one 60th of a second
             let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(1.0/60.0 * Double(NSEC_PER_SEC)))

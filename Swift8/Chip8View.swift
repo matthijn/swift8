@@ -10,6 +10,11 @@ import Cocoa
 
 class Chip8View : NSView
 {
+
+    @IBOutlet weak var loadButton: NSButton!
+    @IBOutlet weak var resetButton: NSButton!
+    @IBOutlet weak var pauseButton: NSButton!
+
     let keyboard = Keyboard()
     
     // Let the main view get all the keyspresses
@@ -24,11 +29,13 @@ class Chip8View : NSView
 
     // MARK: Keyboard keys forwarding
 
-    override func keyUp(theEvent: NSEvent) {
+    override func keyUp(theEvent: NSEvent)
+    {
         self.keyboard.keyUp(theEvent)
     }
 
-    override func keyDown(theEvent: NSEvent) {
+    override func keyDown(theEvent: NSEvent)
+    {
         self.keyboard.keyDown(theEvent)
     }
 
