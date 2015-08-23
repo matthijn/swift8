@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class Chip8View : NSView, Chip8Graphics
+class Chip8View : NSView
 {
     let keyboard = Keyboard()
     
@@ -19,24 +19,9 @@ class Chip8View : NSView, Chip8Graphics
         }
     }
     
-    // MARK: Chip8Graphics
-    
-    /**
-     * Clear the screen 
-     */
-    func clear()
-    {
-        
-    }
-    
-    /**
-     * Draw sprite data on location, removing existing color if written again at the same location, returning true if that is the case
-     */
-    func draw(spriteData: ArraySlice<UInt8>, x: UInt8, y: UInt8) -> Bool
-    {
-        return false
-    }
-    
+    // This view will draw the Chip8 screen
+    @IBOutlet weak var canvasView: CanvasView!
+
     // MARK: Keyboard keys forwarding
 
     override func keyUp(theEvent: NSEvent) {
@@ -46,4 +31,5 @@ class Chip8View : NSView, Chip8Graphics
     override func keyDown(theEvent: NSEvent) {
         self.keyboard.keyDown(theEvent)
     }
+
 }

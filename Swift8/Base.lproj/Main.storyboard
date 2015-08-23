@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="15A244d" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="15A263e" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="8173.3"/>
@@ -64,9 +64,63 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="Chip8ViewController" customModule="Swift8" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl" customClass="Chip8View" customModule="Swift8" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="640" height="360"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="Gdf-HG-qTf" customClass="CanvasView" customModule="Swift8" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="40" width="640" height="320"/>
+                                <animations/>
+                            </customView>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="p2M-q5-WRv">
+                                <rect key="frame" x="14" y="2" width="70" height="32"/>
+                                <animations/>
+                                <buttonCell key="cell" type="push" title="Load" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gFW-sT-WOl">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <connections>
+                                        <action selector="onLoadButton:" target="XfG-lQ-9wD" id="2mv-w4-bWo"/>
+                                    </connections>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QRx-7N-ZCU">
+                                <rect key="frame" x="84" y="2" width="75" height="32"/>
+                                <animations/>
+                                <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kds-4Y-MpI">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <connections>
+                                        <action selector="onResetButton:" target="XfG-lQ-9wD" id="gqY-h3-2DH"/>
+                                    </connections>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eYB-gL-QSx">
+                                <rect key="frame" x="159" y="2" width="77" height="32"/>
+                                <animations/>
+                                <buttonCell key="cell" type="push" title="Pause" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="4Mo-BH-JcZ">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                    <connections>
+                                        <action selector="onPauseButton:" target="XfG-lQ-9wD" id="CUR-CN-fOE"/>
+                                    </connections>
+                                </buttonCell>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Gdf-HG-qTf" secondAttribute="trailing" id="IdE-u8-EXn"/>
+                            <constraint firstItem="eYB-gL-QSx" firstAttribute="top" secondItem="Gdf-HG-qTf" secondAttribute="bottom" constant="10" id="Nji-Qj-FIQ"/>
+                            <constraint firstAttribute="bottom" secondItem="eYB-gL-QSx" secondAttribute="bottom" constant="9" id="OpT-8t-CaA"/>
+                            <constraint firstItem="QRx-7N-ZCU" firstAttribute="leading" secondItem="p2M-q5-WRv" secondAttribute="trailing" constant="12" id="ZVb-Np-fYe"/>
+                            <constraint firstItem="p2M-q5-WRv" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="efB-cb-N1b"/>
+                            <constraint firstItem="eYB-gL-QSx" firstAttribute="leading" secondItem="QRx-7N-ZCU" secondAttribute="trailing" constant="12" id="gWh-iS-93X"/>
+                            <constraint firstItem="Gdf-HG-qTf" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="hQe-dq-z9K"/>
+                            <constraint firstAttribute="bottom" secondItem="p2M-q5-WRv" secondAttribute="bottom" constant="9" id="m49-CW-bLL"/>
+                            <constraint firstAttribute="bottom" secondItem="QRx-7N-ZCU" secondAttribute="bottom" constant="9" id="uDx-HA-s9p"/>
+                            <constraint firstItem="Gdf-HG-qTf" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="ueV-jK-MDD"/>
+                        </constraints>
                         <animations/>
+                        <connections>
+                            <outlet property="canvasView" destination="Gdf-HG-qTf" id="xPh-6V-2pL"/>
+                        </connections>
                     </view>
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

@@ -16,6 +16,7 @@
 		83AB8BC81B836E690062010E /* Graphics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BC71B836E690062010E /* Graphics.swift */; };
 		83AB8BCA1B836E740062010E /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BC91B836E740062010E /* Sound.swift */; };
 		83AB8BCC1B836E7C0062010E /* Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BCB1B836E7C0062010E /* Keyboard.swift */; };
+		83BA38BB1B8A07ED00323285 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA38BA1B8A07ED00323285 /* CanvasView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		83AB8BC71B836E690062010E /* Graphics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Graphics.swift; sourceTree = "<group>"; };
 		83AB8BC91B836E740062010E /* Sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 		83AB8BCB1B836E7C0062010E /* Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keyboard.swift; sourceTree = "<group>"; };
+		83BA38BA1B8A07ED00323285 /* CanvasView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				83AB8BB11B80E5530062010E /* AppDelegate.swift */,
 				83AB8BB31B80E5530062010E /* Chip8ViewController.swift */,
 				839D2F051B876E2A008623FC /* Chip8View.swift */,
+				83BA38BA1B8A07ED00323285 /* CanvasView.swift */,
 				83AB8BC11B80E6570062010E /* Resources */,
 			);
 			name = App;
@@ -171,6 +174,7 @@
 			files = (
 				83AB8BCA1B836E740062010E /* Sound.swift in Sources */,
 				83AB8BC41B83633A0062010E /* Chip8.swift in Sources */,
+				83BA38BB1B8A07ED00323285 /* CanvasView.swift in Sources */,
 				83AB8BB41B80E5530062010E /* Chip8ViewController.swift in Sources */,
 				83AB8BC81B836E690062010E /* Graphics.swift in Sources */,
 				83AB8BCC1B836E7C0062010E /* Keyboard.swift in Sources */,

@@ -22,6 +22,9 @@ protocol Chip8Graphics
 
 class Graphics : Chip8Graphics
 {
+    // The number of pixels in the Chip8 system
+    static let ScreenWidth : CGFloat = 64
+    static let ScreenHeight : CGFloat = 32
     
     // Holds the font data that will be loaded in memory to display numbers on screen
     static let FontSpriteData : [UInt8] = [

@@ -25,7 +25,7 @@ class Chip8ViewController: NSViewController
         let keyboard = self.chip8View.keyboard;
         
         // Creating graphics through the UIView
-        let graphics = Graphics(graphicsDelegate: self.chip8View)
+        let graphics = Graphics(graphicsDelegate: self.chip8View.canvasView)
         
         // Create the chip system
         let chip = Chip8(graphics: graphics, sound: Sound(), keyboard: keyboard)
@@ -44,7 +44,23 @@ class Chip8ViewController: NSViewController
         }
     }
 
+    // MARK: User interaction
+    
+    @IBAction func onLoadButton(sender: AnyObject)
+    {
+    
+    }
 
+
+    @IBAction func onResetButton(sender: AnyObject)
+    {
+    
+    }
+    
+    @IBAction func onPauseButton(sender: AnyObject)
+    {
+    
+    }
 
 }
 
