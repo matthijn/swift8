@@ -87,31 +87,33 @@ class CanvasView : NSView, Chip8Graphics
      */
     override func drawRect(dirtyRect: NSRect)
     {
-        
         // Todo: Determine which parts need to be drawn for increased performance instead of drawing all
 
        var colorToDraw = self.backgroundColor
         
         // Iterate over every row
-        for var x : CGFloat = 0; x < Graphics.ScreenWidth; x++
+        for(var y : CGFloat = 0; y < Graphics.ScreenHeight; y++)
         {
             // And column
-            for(var y : CGFloat = 0; y < Graphics.ScreenHeight; y++)
+            for var x : CGFloat = 0; x < Graphics.ScreenWidth; x++
             {
                 // Get the state for the current pixel
-                let pixelState = self.pixels[Int(x * (y * Graphics.ScreenWidth))]
-                
+                let pixelIndex = Int(x + (y * Graphics.ScreenWidth))
+
+                let pixelState = self.pixels[pixelIndex]
+
                 // Determine color to draw for this pixel
                 colorToDraw = (pixelState) ? self.foregroundColor : self.backgroundColor
                 colorToDraw.set()
 
                 // Determine the NSView location to draw, NSView works from bottom left while Chip8 works from top left
                 let canvasX = x * self.pixelSize
-                let canvasY = (Graphics.ScreenHeight * self.pixelSize) - (y * self.pixelSize)
-                
+                let canvasY = (Graphics.ScreenHeight * self.pixelSize) - (y * self.pixelSize) - self.pixelSize
+
                 let rectToDraw = CGRectMake(canvasX, canvasY, self.pixelSize,
                     self.pixelSize)
-                
+
+                // And draw
                 NSRectFill(rectToDraw)
             }
         }

@@ -60,7 +60,7 @@ class Chip8ViewController: NSViewController
             if let file = openPanel.URLs.first
             {
                 // Try to read the file
-                self.loadedRom = NSData(contentsOfFile: file.absoluteString)
+                self.loadedRom = NSData(contentsOfFile:file.path!)
 
                 if let rom = self.loadedRom
                 {
