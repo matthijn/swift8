@@ -86,13 +86,13 @@ class CanvasView : NSView, Chip8Graphics
      * Draws on the NSView
      */
     override func drawRect(dirtyRect: NSRect)
-    {
+    {   
         // Todo: Determine which parts need to be drawn for increased performance instead of drawing all
 
        var colorToDraw = self.backgroundColor
         
         // Iterate over every row
-        for(var y : CGFloat = 0; y < Graphics.ScreenHeight; y++)
+        for var y : CGFloat = 0; y < Graphics.ScreenHeight; y++
         {
             // And column
             for var x : CGFloat = 0; x < Graphics.ScreenWidth; x++
