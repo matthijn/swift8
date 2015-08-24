@@ -483,14 +483,15 @@ class Chip8
         self.stopLoop()
         self.reset()
         
-        // Get all data and put it in the Chip8 memory
-        for var i = 0; i < data.length; i++
+        // Converting NSData to byte array
+        var bytesArray = [UInt8](count: data.length, repeatedValue: 0)
+        data.getBytes(&bytesArray, length: data.length)
+        
+        // Getting each byte and moving it to the correct spot in memory
+        for (index, byte) in bytesArray.enumerate()
         {
-            // Get the byte
-            let byte = data.bytes[i]
-            
-            // And move to the chip8 memory array
-            self.memory[self.RomLocation + i] = byte
+            let indexInMemory = Chip8.RomLocation + UInt16(index)
+            self.memory[Int(indexInMemory)] = byte
         }
         
         if autostart
