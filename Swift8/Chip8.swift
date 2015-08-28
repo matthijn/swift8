@@ -8,6 +8,13 @@
 
 import Foundation
 
+// Will hold the callback that belongs to the opcode, so the correct code for that opcode can be easily executed
+struct Opcode
+{
+    let code : UInt16
+    let callback: ((UInt16) -> Void)
+}
+
 class Chip8
 {
     // Total memory size
@@ -72,239 +79,142 @@ class Chip8
     
     // Since we are checking on the AND value, order here is important
 
-    lazy var mapping : [UInt16: ((UInt16) -> Void)] = {
+    lazy var mapping : [Opcode] = {
         
         return [
             
-            // CLS (clear the display)
-            0x00E0: { arg in
-                self.graphics.clear()
-            },
+            // LD_V_I (Reads from memory location I and stores it in registers V0 to V(x))
+            Opcode(code: 0xF065, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                
+                for var currentRegister = 0; currentRegister <= registerX; currentRegister++
+                {
+                    // Get the byte from memory
+                    let memoryByte = self.memory[Int(self.I)]
+                    
+                    // Store it in current register
+                    self.V[currentRegister] = memoryByte
+                    
+                    // And increment the I register memory address
+                    self.I++
+                }
+            }),
             
-            // RET (return from a subroutine)
-            0x00EE: { arg in
-                // Set the program counter to the current item on the stack
-                self.pc = self.stack[Int(self.sp)]
-
-                // Decrement stack pointer
-                self.sp--
-            },
+            // LD_I_V (Stores the registers v0 to v(x) starting in memory beginning at location I)
+            Opcode(code: 0xF055, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                
+                for var currentRegister = 0; currentRegister <= registerX; currentRegister++
+                {
+                    // Get byte from register
+                    let registerByte = self.V[currentRegister]
+                    
+                    // Store it in memory
+                    self.memory[Int(self.I)] = registerByte
+                    
+                    self.I++
+                }
+            }),
             
-            // JP_ADDR (jump to a memory address)
-            0x1000: { arg in
-                self.pc = arg & 0x0FFF
-            },
+            // LD_B_V (Stores the binary decimal representation of the value of register V in I)
+            Opcode(code: 0xF033, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                var valueX = self.V[registerX]
+                
+                // With the binary decimal representation (unpacked) every single digit of a number is stored in a seperate byte
+                // Number can be max three digits long (8 bits)
+                for var i = 2; i >= 0; i--
+                {
+                    // Getting the current smallest digit of the whole number
+                    let currentValue = valueX % 10
+                    
+                    // Determine where to store
+                    let index = Int(self.I) + i
+                    
+                    // Store it
+                    self.memory[index] = currentValue
+                    
+                    // Divide by ten zo in the next run the second smallest digit is the new smallest digit
+                    valueX /= 10
+                }
+            }),
             
-            // CALL_ADDR (call address on subroutine)
-            0x2000: { arg in
-                // Place current address on top of stack
-                self.sp++
-                self.stack[Int(self.sp)] = self.pc
-            },
+            // LD_F_V (I is set to the address of the corresponding font block representing the value in register V)
+            Opcode(code: 0xF029, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let valueX = self.V[registerX]
+                
+                // Get the memory offset for this hex number (a single font consists of 5 bytes)
+                let memoryOffset = Chip8.FontMemoryLocation + UInt16(valueX * 5)
+                
+                // And point to the beginning of the font
+                self.I = memoryOffset
+            }),
             
-            // SE_V_BYTE (skip next instruction if register equals value)
-            0x3000: { arg in
-                let register = Int(arg & 0x0F00) >> 8
-                let value = UInt8(arg & 0x00FF)
-
-                if(self.V[register] == value)
+            // ADD_I_V (I and the register are added and stored in I)
+            Opcode(code: 0xF01E, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                self.I = self.I + UInt16(self.V[registerX])
+            }),
+            
+            // LD_ST_V (Set the soundTimer to the value in register V)
+            Opcode(code: 0xF018, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                self.soundTimer = self.V[registerX]
+            }),
+            
+            // LD_DT_V (Set the delayTimer to the value in register V)
+            Opcode(code: 0xF015, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                self.delayTimer = self.V[registerX]
+            }),
+            
+            // LD_V_K  (Set the register V to the value of the keypress by the keyboard (will wait for keypress))
+            Opcode(code: 0xF00A, callback: { arg in
+                
+                let registerX = Int(arg & 0x0F00) >> 8
+                
+                repeat
+                {
+                    if(self.keyboard.currentKey != -1)
+                    {
+                        self.V[registerX] = UInt8(self.keyboard.currentKey)
+                    }
+                }
+                    while(self.keyboard.currentKey == -1)
+                
+            }),
+            
+            // LD_V_DT (Set the register V to the value in dt)
+            Opcode(code: 0xF007, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                self.V[registerX] = self.delayTimer
+            }),
+            
+            // SKNP_V (Skips the next instruction if the key which represents the valine in register V is not pressed)
+            Opcode(code: 0xE0A1, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let valueX = Int8(self.V[registerX])
+                
+                if valueX != self.keyboard.currentKey
                 {
                     self.pc++
                 }
-            },
+            }),
             
-            // SNE_V_BYTE (skip next instruction if register does not equals value)
-            0x4000: { arg in
+            // SKP_V (Skips the next instruction if the key which represents the value in register V is pressed)
+            Opcode(code: 0xE09E, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
-                let value = UInt8(arg & 0x00FF)
+                let valueX = Int8(self.V[registerX])
                 
-                if(self.V[registerX] != value)
+                if valueX == self.keyboard.currentKey
                 {
                     self.pc++
                 }
-            },
-            
-            // SE_V_V (skip next instruction if register equals other register)
-            0x5000: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let registerY = Int(arg & 0x00F0)
-
-                if(self.V[registerX] == self.V[registerY])
-                {
-                    self.pc++
-                }
-            },
-            
-            // LD_V_BYTE (set register with value)
-            0x6000: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let value = UInt8(arg & 0x00FF)
-
-                self.V[registerX] = value;
-            },
-            
-            // ADD_V_BYTE (add value to register v)
-            0x7000: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let value = UInt8(arg & 0x00FF)
-                let currentValue = self.V[registerX]
-                
-                // Adding the value, but wrapping around since we can't store more in a byte
-                self.V[registerX] = UInt8(Int((currentValue + value)) % 256)
-            },
-            
-            // OR_V_V (OR two registers and store result in first register)
-            0x8001: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let registerY = Int(arg & 0x00F0)
-                
-                let valueX = self.V[registerX]
-                let valueY = self.V[registerY]
-                
-                self.V[registerX] = valueX | valueY
-            },
-            
-            // AND_V_V (AND two registers and store result in first register)
-            0x8002: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let registerY = Int(arg & 0x00F0) >> 4
-                
-                let valueX = self.V[registerX]
-                let valueY = self.V[registerY]
-                
-                self.V[registerX] = valueX & valueY
-            },
-            
-            // XOR_V_V (XOR two registers and store result in first register)
-            0x8003: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let registerY = Int(arg & 0x00F0) >> 4
-                
-                let valueX = self.V[registerX]
-                let valueY = self.V[registerY]
-                
-                self.V[registerX] = valueX ^ valueY
-            },
-            
-            // ADD_V_V (Add two registers and store result in first register carry flag is set)
-            0x8004: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let registerY = Int(arg & 0x00F0) >> 4
-                
-                let valueX = self.V[registerX]
-                let valueY = self.V[registerY]
-                
-                // Determine overflowed value
-                let sum = valueX + valueY
-                
-                // Set the flag if needed
-                self.V[0xF] = (sum > 255) ? 1 : 0
-                
-                // Store wrapped value
-                self.V[registerX] = UInt8(Int(sum) % 256)
-            },
-            
-            // SUB_V_V (Subtract the second register from the first and store result in first register, borrow flag is set when there is no borrow)
-            0x8005: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let registerY = Int(arg & 0x00F0) >> 4
-                
-                let valueX = self.V[registerX]
-                let valueY = self.V[registerY]
-                
-                let result = valueX - valueY
-                
-                self.V[0xF] = (result < 0) ? 0 : 1
-                
-                self.V[registerX] = UInt8(Int(result) % 256)
-            },
-            
-            // SHR_V (Shift the first register right by one the flag will contain the LSB before the shift
-            0x8006: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let valueX = self.V[registerX]
-                
-                // Set the flag
-                let lsb = valueX & 0b1
-                self.V[0xF] = lsb
-                
-                // Shift
-                self.V[registerX] = valueX >> 1
-            },
-            
-            // SUBN_V_V (Subtract the first register from the second register and store the result in the first register, borrow flag is set when there is no borrow)
-            0x8007: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let registerY = Int(arg & 0x00F0) >> 4
-                
-                let valueX = self.V[registerX]
-                let valueY = self.V[registerY]
-                
-                let result = valueY - valueX
-                
-                self.V[0xF] = (result < 0) ? 0 : 1
-                
-                self.V[registerX] = UInt8(Int(result) % 256)
-            },
-            
-            // SHL_V (Shift the first register left by one the flag will containt the MSB before the shift
-            0x800E: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let valueX = self.V[registerX]
-                
-                // Set the flag
-                let msb = valueX & 0b10000000
-                self.V[0xF] = msb
-                
-                // Shift
-                self.V[registerX] = valueX << 1
-            },
-            
-            // LD_V_V (copy register to another register)
-            0x8000: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let registerY = Int(arg & 0x00F0) >> 4
-                
-                self.V[registerX] = self.V[registerY]
-            },            
-            
-            // SNE_V_V (Skip next instruction if the first register does not match the second register)
-            0x9000: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let registerY = Int(arg & 0x00F0) >> 4
-                
-                let valueX = self.V[registerX]
-                let valueY = self.V[registerY]
-                
-                if(valueX != valueY)
-                {
-                    self.pc++
-                }
-            },
-            
-            // LD_I_ADDR (The I register is set with the ADDR)
-            0xA000: { arg in
-                self.I = arg & 0x0FFF
-            },
-
-            // JP_V0_ADDR (Jump to the address of ADDR + V0)
-            0xB000: { arg in
-                let value0 = self.V[0];
-                self.pc = UInt16(value0) + (arg & 0x0FFF)
-            },
-            
-            // RND_V_BYTE (Generates a random byte value which then AND is applied to that value based on the byte parameter and placed in the register V)
-            0xC000: { arg in
-                let random = UInt8(arc4random_uniform(256))
-                
-                let registerX = Int(arg & 0x0F00) >> 8
-                let value = UInt8(arg & 0x00FF)
-                
-                self.V[registerX] = random & value
-            },
+            }),
             
             // DRW_V_V_N (Draw sprite of length N on memory address I on coordinates of the passed registers VF is set on collision)
-            0xD000: { arg in
+            Opcode(code: 0xD000, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
                 let registerY = Int(arg & 0x00F0) >> 4
                 
@@ -330,137 +240,234 @@ class Chip8
                 {
                     self.V[0xF] = 0
                 }
-            },
-          
-            // SKP_V (Skips the next instruction if the key which represents the value in register V is pressed)
-            0xE09E: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let valueX = Int8(self.V[registerX])
+            }),
+            
+            // RND_V_BYTE (Generates a random byte value which then AND is applied to that value based on the byte parameter and placed in the register V)
+            Opcode(code: 0xC000, callback: { arg in
+                let random = UInt8(arc4random_uniform(256))
                 
-                if valueX == self.keyboard.currentKey
+                let registerX = Int(arg & 0x0F00) >> 8
+                let value = UInt8(arg & 0x00FF)
+                
+                self.V[registerX] = random & value
+            }),
+            
+            // JP_V0_ADDR (Jump to the address of ADDR + V0)
+            Opcode(code: 0xB000, callback: { arg in
+                let value0 = self.V[0];
+                self.pc = UInt16(value0) + (arg & 0x0FFF)
+            }),
+            
+            // LD_I_ADDR (The I register is set with the ADDR)
+            Opcode(code: 0xA000, callback: { arg in
+                self.I = arg & 0x0FFF
+            }),
+            
+            // SNE_V_V (Skip next instruction if the first register does not match the second register)
+            Opcode(code: 0x9000, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let registerY = Int(arg & 0x00F0) >> 4
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                if(valueX != valueY)
                 {
                     self.pc++
                 }
-            },
-            
-            // SKNP_V (Skips the next instruction if the key which represents the valine in register V is not pressed)
-            0xE0A1: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                let valueX = Int8(self.V[registerX])
-                
-                if valueX != self.keyboard.currentKey
-                {
-                    self.pc++
-                }
-            },
-            
-            // LD_V_DT (Set the register V to the value in dt)
-            0xF007: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                self.V[registerX] = self.delayTimer
-            },
-            
-            // LD_V_K  (Set the register V to the value of the keypress by the keyboard (will wait for keypress))
-            0xF00A: { arg in
-                
-                let registerX = Int(arg & 0x0F00) >> 8
+            }),
 
-                repeat
-                {
-                    if(self.keyboard.currentKey != -1)
-                    {
-                        self.V[registerX] = UInt8(self.keyboard.currentKey)
-                    }
-                }
-                while(self.keyboard.currentKey == -1)
-
-            },
-            
-            // LD_DT_V (Set the delayTimer to the value in register V)
-            0xF015: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                self.delayTimer = self.V[registerX]
-            },
-            
-            // LD_ST_V (Set the soundTimer to the value in register V)
-            0xF018: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                self.soundTimer = self.V[registerX]
-            },
-            
-            // ADD_I_V (I and the register are added and stored in I)
-            0xF01E: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
-                self.I = self.I + UInt16(self.V[registerX])
-            },
-            
-            // LD_F_V (I is set to the address of the corresponding font block representing the value in register V)
-            0xF029: { arg in
+            // SHL_V (Shift the first register left by one the flag will containt the MSB before the shift
+            Opcode(code: 0x800E, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
                 let valueX = self.V[registerX]
                 
-                // Get the memory offset for this hex number (a single font consists of 5 bytes)
-                let memoryOffset = Chip8.FontMemoryLocation + UInt16(valueX * 5)
+                // Set the flag
+                let msb = valueX & 0b10000000
+                self.V[0xF] = msb
                 
-                // And point to the beginning of the font
-                self.I = memoryOffset
-            },
+                // Shift
+                self.V[registerX] = valueX << 1
+            }),
             
-            // LD_B_V (Stores the binary decimal representation of the value of register V in I)
-            0xF033: { arg in
+            // SUBN_V_V (Subtract the first register from the second register and store the result in the first register, borrow flag is set when there is no borrow)
+            Opcode(code: 0x8007, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
-                var valueX = self.V[registerX]
+                let registerY = Int(arg & 0x00F0) >> 4
                 
-                // With the binary decimal representation (unpacked) every single digit of a number is stored in a seperate byte
-                // Number can be max three digits long (8 bits)
-                for var i = 2; i >= 0; i--
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                let result = valueY - valueX
+                
+                self.V[0xF] = (result < 0) ? 0 : 1
+                
+                self.V[registerX] = UInt8(Int(result) % 256)
+            }),
+            
+            // SHR_V (Shift the first register right by one the flag will contain the LSB before the shift
+            Opcode(code: 0x8006, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let valueX = self.V[registerX]
+                
+                // Set the flag
+                let lsb = valueX & 0b1
+                self.V[0xF] = lsb
+                
+                // Shift
+                self.V[registerX] = valueX >> 1
+            }),
+            
+            // SUB_V_V (Subtract the second register from the first and store result in first register, borrow flag is set when there is no borrow)
+            Opcode(code: 0x8005, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let registerY = Int(arg & 0x00F0) >> 4
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                let result = valueX - valueY
+                
+                self.V[0xF] = (result < 0) ? 0 : 1
+                
+                self.V[registerX] = UInt8(Int(result) % 256)
+            }),
+            
+            // ADD_V_V (Add two registers and store result in first register carry flag is set)
+            Opcode(code: 0x8004, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let registerY = Int(arg & 0x00F0) >> 4
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                // Determine overflowed value
+                let sum = valueX + valueY
+                
+                // Set the flag if needed
+                self.V[0xF] = (sum > 255) ? 1 : 0
+                
+                // Store wrapped value
+                self.V[registerX] = UInt8(Int(sum) % 256)
+            }),
+            
+            // XOR_V_V (XOR two registers and store result in first register)
+            Opcode(code: 0x8003, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let registerY = Int(arg & 0x00F0) >> 4
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                self.V[registerX] = valueX ^ valueY
+            }),
+            
+            // AND_V_V (AND two registers and store result in first register)
+            Opcode(code: 0x8002, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let registerY = Int(arg & 0x00F0) >> 4
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                self.V[registerX] = valueX & valueY
+            }),
+            
+            // OR_V_V (OR two registers and store result in first register)
+            Opcode(code: 0x8001, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let registerY = Int(arg & 0x00F0)
+                
+                let valueX = self.V[registerX]
+                let valueY = self.V[registerY]
+                
+                self.V[registerX] = valueX | valueY
+            }),
+            
+            // LD_V_V (copy register to another register)
+            Opcode(code: 0x8000, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let registerY = Int(arg & 0x00F0) >> 4
+                
+                self.V[registerX] = self.V[registerY]
+            }),
+            
+            // ADD_V_BYTE (add value to register v)
+            Opcode(code: 0x7000, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let value = UInt8(arg & 0x00FF)
+                let currentValue = self.V[registerX]
+                
+                // Adding the value, but wrapping around since we can't store more in a byte
+                self.V[registerX] = UInt8(Int((currentValue + value)) % 256)
+            }),
+            
+            // LD_V_BYTE (set register with value)
+            Opcode(code: 0x6000, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let value = UInt8(arg & 0x00FF)
+                
+                self.V[registerX] = value;
+            }),
+            
+            // SE_V_V (skip next instruction if register equals other register)
+            Opcode(code: 0x5000, callback: { arg in
+                let registerX = Int(arg & 0x0F00) >> 8
+                let registerY = Int(arg & 0x00F0)
+                
+                if(self.V[registerX] == self.V[registerY])
                 {
-                    // Getting the current smallest digit of the whole number
-                    let currentValue = valueX % 10
-                    
-                    // Determine where to store
-                    let index = Int(self.I) + i
+                    self.pc++
+                }
+            }),
 
-                    // Store it
-                    self.memory[index] = currentValue
-                    
-                    // Divide by ten zo in the next run the second smallest digit is the new smallest digit
-                    valueX /= 10
-                }
-            },
-            
-            // LD_I_V (Stores the registers v0 to v(x) starting in memory beginning at location I)
-            0xF055: { arg in
+            // SNE_V_BYTE (skip next instruction if register does not equals value)
+            Opcode(code: 0x4000, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
+                let value = UInt8(arg & 0x00FF)
                 
-                for var currentRegister = 0; currentRegister <= registerX; currentRegister++
+                if(self.V[registerX] != value)
                 {
-                    // Get byte from register
-                    let registerByte = self.V[currentRegister]
-                    
-                    // Store it in memory
-                    self.memory[Int(self.I)] = registerByte
-                    
-                    self.I++
+                    self.pc++
                 }
-            },
+            }),
+
+            // SE_V_BYTE (skip next instruction if register equals value)
+            Opcode(code: 0x3000, callback: { arg in
+                let register = Int(arg & 0x0F00) >> 8
+                let value = UInt8(arg & 0x00FF)
+                
+                if(self.V[register] == value)
+                {
+                    self.pc++
+                }
+            }),
             
-            // LD_V_I (Reads from memory location I and stores it in registers V0 to V(x))
-            0xF065: { arg in
-                let registerX = Int(arg & 0x0F00) >> 8
+            // CALL_ADDR (call address on subroutine)
+            Opcode(code: 0x2000, callback: { arg in
+                // Place current address on top of stack
+                self.sp++
+                self.stack[Int(self.sp)] = self.pc
+            }),
+            
+            // JP_ADDR (jump to a memory address)
+            Opcode(code: 0x1000, callback: { arg in
+                self.pc = arg & 0x0FFF
+            }),
+
+            // RET (return from a subroutine)
+            Opcode(code: 0x00EE, callback: { arg in
+                // Set the program counter to the current item on the stack
+                self.pc = self.stack[Int(self.sp)]
                 
-                for var currentRegister = 0; currentRegister <= registerX; currentRegister++
-                {
-                    // Get the byte from memory
-                    let memoryByte = self.memory[Int(self.I)]
-                    
-                    // Store it in current register
-                    self.V[currentRegister] = memoryByte
-                    
-                    // And increment the I register memory address
-                    self.I++
-                }
-            }
+                // Decrement stack pointer
+                self.sp--
+            }),
+            
+            // CLS (clear the display)
+            Opcode(code: 0x00E0, callback: { arg in
+                self.graphics.clear()
+            })
         ]
     }()
 
@@ -594,8 +601,10 @@ class Chip8
         self.pc+=2
         
         // Try every possible opcode to see if the current memory block hold that opcode
-        for (opcode, closure) in self.mapping
+        for (mapping) in self.mapping
         {
+            let opcode = mapping.code
+
             // Determine if the current opcode matches with the information in the memory block
             if (memoryBlock & opcode) == opcode
             {
@@ -603,7 +612,7 @@ class Chip8
                 print("Memory matches opcode \(String(opcode, radix: 16))")
 
                 // Call the closure
-                closure(memoryBlock)
+                mapping.callback(memoryBlock)
 
                 // No need to check further
                 break
