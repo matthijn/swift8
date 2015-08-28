@@ -39,8 +39,9 @@ class CanvasView : NSView, Chip8Graphics
     {
         var didOverwrite = false
      
-        for (index, spriteByte) in spriteData.enumerate()
+        for (index, var spriteByte) in spriteData.enumerate()
         {
+
             // Every next byte will be drawn one row lower then the previous
             var currentY = y + UInt8(index)
             
@@ -56,11 +57,17 @@ class CanvasView : NSView, Chip8Graphics
                 // Wrapping the x around
                 currentX = (CGFloat(currentX) >= Graphics.ScreenWidth) ? currentX - UInt8(Graphics.ScreenWidth) : currentX
                 
-                // Get the next bit that represents a pixel from this byte and store it in a bool
-                let currentPixel = (spriteByte << 1 == 1) ? true : false
+                // Create a byte with only the  the left most bit from this byte to get the current pixel
+                let leftMostBit = spriteByte ^ 0b01111111
                 
+                // Shift left so the next round we get the new next bit
+                spriteByte = spriteByte << 1
+                
+                // Convert the byte to a boolean
+                let currentPixel = (leftMostBit == 255) ? true : false
+
                 // Determine the index in the pixels array to change to the new pixel
-                let pixelPosition = Int((currentY * UInt8(Graphics.ScreenWidth)) + currentX)
+                let pixelPosition = ((Int(currentY) * Int(Graphics.ScreenWidth)) + Int(currentX))
                 
                 // Set the didOverwrite flag if needed
                 if self.pixels[pixelPosition] == currentPixel && !didOverwrite

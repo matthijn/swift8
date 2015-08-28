@@ -18,19 +18,19 @@ struct Opcode
 class Chip8
 {
     // Total memory size
-    static let MemorySize = 0x1000
+    static let MemorySize = 4096
     
     // Total register size
-    static let RegisterSize = 0xF
+    static let RegisterSize = 16
     
     // Total stack size
-    static let StackSize = 0xF
+    static let StackSize = 16
 
     // The location from where the fonts are going to be stored in memory
     static let FontMemoryLocation : UInt16 = 0
     
     // The location from where roms are loaded
-    static let RomLocation : UInt16 = 511
+    static let RomLocation : UInt16 = 0x200
     
     // Will hold the memory
     var memory = [UInt8](count: Chip8.MemorySize, repeatedValue: 0)
@@ -198,7 +198,7 @@ class Chip8
                 
                 if valueX != self.keyboard.currentKey
                 {
-                    self.pc++
+                    self.pc += 2
                 }
             }),
             
@@ -209,7 +209,7 @@ class Chip8
                 
                 if valueX == self.keyboard.currentKey
                 {
-                    self.pc++
+                    self.pc += 2
                 }
             }),
             
@@ -273,7 +273,7 @@ class Chip8
                 
                 if(valueX != valueY)
                 {
-                    self.pc++
+                    self.pc += 2
                 }
             }),
 
@@ -326,11 +326,16 @@ class Chip8
                 let valueX = self.V[registerX]
                 let valueY = self.V[registerY]
                 
-                let result = valueX - valueY
+                var result = Int(valueX) - Int(valueY)
                 
                 self.V[0xF] = (result < 0) ? 0 : 1
                 
-                self.V[registerX] = UInt8(Int(result) % 256)
+                if result < 0
+                {
+                    result += 256
+                }
+                
+                self.V[registerX] = UInt8(result)
             }),
             
             // ADD_V_V (Add two registers and store result in first register carry flag is set)
@@ -342,7 +347,7 @@ class Chip8
                 let valueY = self.V[registerY]
                 
                 // Determine overflowed value
-                let sum = valueX + valueY
+                let sum = Int(valueX) + Int(valueY)
                 
                 // Set the flag if needed
                 self.V[0xF] = (sum > 255) ? 1 : 0
@@ -417,7 +422,7 @@ class Chip8
                 
                 if(self.V[registerX] == self.V[registerY])
                 {
-                    self.pc++
+                    self.pc += 2
                 }
             }),
 
@@ -428,7 +433,7 @@ class Chip8
                 
                 if(self.V[registerX] != value)
                 {
-                    self.pc++
+                    self.pc += 2
                 }
             }),
 
@@ -439,7 +444,7 @@ class Chip8
                 
                 if(self.V[register] == value)
                 {
-                    self.pc++
+                    self.pc += 2
                 }
             }),
             
@@ -452,7 +457,8 @@ class Chip8
             
             // JP_ADDR (jump to a memory address)
             Opcode(code: 0x1000, callback: { arg in
-                self.pc = arg & 0x0FFF
+                let address = arg & 0x0FFF
+                self.pc = address
             }),
 
             // RET (return from a subroutine)
