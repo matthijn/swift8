@@ -68,7 +68,7 @@ class Chip8ViewController: NSViewController
                     self.view.window?.title = "Swift8 - " + file.absoluteString.componentsSeparatedByString("/").last!
 
                     // And load the data
-//                    self.chip?.load(rom, autostart: true)
+                    self.chip?.load(rom, autostart: true)
                 }
                 // Something went wrong, show an alert
                 else
