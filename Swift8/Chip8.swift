@@ -171,7 +171,6 @@ class Chip8
             
             // LD_V_K  (Set the register V to the value of the keypress by the keyboard (will wait for keypress))
             Opcode(code: 0xF00A, callback: { arg in
-                
                 let registerX = Int(arg & 0x0F00) >> 8
                 
                 repeat
@@ -227,7 +226,7 @@ class Chip8
                 let end = Int(self.I + spriteSize)
                 
                 // Get the part of the memory with the sprite
-                let memorySlice = self.memory[start...end]
+                let memorySlice = self.memory[start..<end]
                 
                 // Draw the graphics
                 
@@ -248,7 +247,7 @@ class Chip8
                 
                 let registerX = Int(arg & 0x0F00) >> 8
                 let value = UInt8(arg & 0x00FF)
-                
+
                 self.V[registerX] = random & value
             }),
             
@@ -457,8 +456,7 @@ class Chip8
             
             // JP_ADDR (jump to a memory address)
             Opcode(code: 0x1000, callback: { arg in
-                let address = arg & 0x0FFF
-                self.pc = address
+                self.pc = arg & 0x0FFF
             }),
 
             // RET (return from a subroutine)
