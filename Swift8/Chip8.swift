@@ -282,7 +282,7 @@ class Chip8
                 let valueX = self.V[registerX]
                 
                 // Set the flag
-                let msb = valueX & 0b10000000
+                let msb = UInt8((valueX >= 128) ? 1 : 0)
                 self.V[0xF] = msb
                 
                 // Shift
