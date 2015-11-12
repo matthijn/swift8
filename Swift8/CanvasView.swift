@@ -55,7 +55,7 @@ class CanvasView : NSView, Chip8Graphics
             for var bitIndex = 0; bitIndex < 8; bitIndex++
             {
                 // Every bit will be drawn on the next column
-                var currentX = x + UInt8(bitIndex)
+                var currentX = x &+ UInt8(bitIndex)
                 
                 // Wrapping the x around
                 if CGFloat(currentX) >= Graphics.ScreenWidth

@@ -408,7 +408,7 @@ class Chip8
                 let currentValue = self.V[registerX]
 
                 // Adding the value, but wrapping around since we can't store more in a byte
-                let newValue = UInt8((Int(currentValue) + Int(value)) % 256)
+                let newValue = currentValue &+ value
 
                 self.V[registerX] = newValue
             }),

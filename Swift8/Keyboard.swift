@@ -35,7 +35,7 @@ class Keyboard
 
     func keyUp(event: NSEvent)
     {
-        // Key stopped being pressed so setting current key to 0
+        // Key stopped being pressed so setting current key to -1 to represent nothing
         self.currentKey = -1
     }
     
