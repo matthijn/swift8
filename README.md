@@ -10,7 +10,7 @@ Multiple games have been written for the CHIP-8 platform and are in the public d
 
 ## Keys
 
-The original systems used an [http://laurencescotford.co.uk/wp-content/uploads/2013/08/COSMAC-VIP-keypad-layout.gif]Hexidecimal Keyboard[/url]. The keys for the emulator are mapped to
+The original systems used an [Hexadecimal Keyboard](http://laurencescotford.co.uk/wp-content/uploads/2013/08/COSMAC-VIP-keypad-layout.gif). The keys for the emulator are mapped to
 
 ```
 1234
