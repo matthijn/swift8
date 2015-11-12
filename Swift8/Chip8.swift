@@ -297,11 +297,16 @@ class Chip8
                 let valueX = self.V[registerX]
                 let valueY = self.V[registerY]
                 
-                let result = valueY - valueX
+                var result = Int(valueY) - Int(valueX)
                 
                 self.V[0xF] = (result < 0) ? 0 : 1
                 
-                self.V[registerX] = UInt8(Int(result) % 256)
+                if result < 0
+                {
+                    result += 256
+                }
+                
+                self.V[registerX] = UInt8(result)
             }),
             
             // SHR_V (Shift the register x register right by one the flag will contain the LSB before the shift
