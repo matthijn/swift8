@@ -66,19 +66,25 @@ class CanvasView : NSView, Chip8Graphics
                 // Create a byte with only the  the left most bit from this byte to get the current pixel
                 let leftMostBit = spriteByte ^ 0b01111111
                 
+                // Convert the byte to a boolean
+                var currentPixel = (leftMostBit >= 128) ? true : false
+
                 // Shift left so the next round we get the new next bit
                 spriteByte = spriteByte << 1
                 
-                // Convert the byte to a boolean
-                let currentPixel = (leftMostBit == 255) ? true : false
-
                 // Determine the index in the pixels array to change to the new pixel
                 let pixelPosition = ((Int(currentY) * Int(Graphics.ScreenWidth)) + Int(currentX))
                 
-                // Set the didOverwrite flag if needed
-                if currentPixel == true && self.pixels[pixelPosition] == currentPixel && !didOverwrite
+                // When drawing on the same spot twice the pixel gets changed to blank if there is a pixel there
+                if currentPixel == true && self.pixels[pixelPosition] == true
                 {
-                    didOverwrite = true
+                    currentPixel = false
+                    
+                    // Change the didOverwrite flag to reflect that a pixel in this draw session has been overwritten
+                    if !didOverwrite
+                    {
+                        didOverwrite = true
+                    }
                 }
                 
                 // Store the new pixel informatio on the correct position
