@@ -304,13 +304,13 @@ class Chip8
                 self.V[registerX] = UInt8(Int(result) % 256)
             }),
             
-            // SHR_V (Shift the first register right by one the flag will contain the LSB before the shift
+            // SHR_V (Shift the register x register right by one the flag will contain the LSB before the shift
             Opcode(code: 0x8006, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
                 let valueX = self.V[registerX]
                 
                 // Set the flag
-                let lsb = valueX & 0b1
+                let lsb = valueX & 0x1
                 self.V[0xF] = lsb
                 
                 // Shift
@@ -380,7 +380,7 @@ class Chip8
             // OR_V_V (OR two registers and store result in first register)
             Opcode(code: 0x8001, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
-                let registerY = Int(arg & 0x00F0)
+                let registerY = Int(arg & 0x00F0) >> 4
                 
                 let valueX = self.V[registerX]
                 let valueY = self.V[registerY]
@@ -401,9 +401,11 @@ class Chip8
                 let registerX = Int(arg & 0x0F00) >> 8
                 let value = UInt8(arg & 0x00FF)
                 let currentValue = self.V[registerX]
-                
+
                 // Adding the value, but wrapping around since we can't store more in a byte
-                self.V[registerX] = UInt8(Int((currentValue + value)) % 256)
+                let newValue = UInt8((Int(currentValue) + Int(value)) % 256)
+
+                self.V[registerX] = newValue
             }),
             
             // LD_V_BYTE (set register with value)
@@ -417,7 +419,7 @@ class Chip8
             // SE_V_V (skip next instruction if register equals other register)
             Opcode(code: 0x5000, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
-                let registerY = Int(arg & 0x00F0)
+                let registerY = Int(arg & 0x00F0) >> 4
                 
                 if(self.V[registerX] == self.V[registerY])
                 {
@@ -449,9 +451,14 @@ class Chip8
             
             // CALL_ADDR (call address on subroutine)
             Opcode(code: 0x2000, callback: { arg in
-                // Place current address on top of stack
+                // Increment stack
                 self.sp++
+                
+                // Place current address on the stack
                 self.stack[Int(self.sp)] = self.pc
+
+                // And jump to passed address
+                self.pc = UInt16(arg & 0x0FFF)
             }),
             
             // JP_ADDR (jump to a memory address)

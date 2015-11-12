@@ -46,7 +46,10 @@ class CanvasView : NSView, Chip8Graphics
             var currentY = y + UInt8(index)
             
             // Wrapping the Y around
-            currentY = (CGFloat(currentY) >= Graphics.ScreenHeight) ? currentY - UInt8(Graphics.ScreenHeight) : currentY
+            if CGFloat(currentY) >= Graphics.ScreenHeight
+            {
+                currentY = currentY - UInt8(Graphics.ScreenHeight)
+            }
             
             // Every bit in the spritedata byte corresponds to one pixel mapping it to the self.pixels array
             for var bitIndex = 0; bitIndex < 8; bitIndex++
@@ -55,7 +58,10 @@ class CanvasView : NSView, Chip8Graphics
                 var currentX = x + UInt8(bitIndex)
                 
                 // Wrapping the x around
-                currentX = (CGFloat(currentX) >= Graphics.ScreenWidth) ? currentX - UInt8(Graphics.ScreenWidth) : currentX
+                if CGFloat(currentX) >= Graphics.ScreenWidth
+                {
+                    currentX = currentX - UInt8(Graphics.ScreenWidth)
+                }
                 
                 // Create a byte with only the  the left most bit from this byte to get the current pixel
                 let leftMostBit = spriteByte ^ 0b01111111
@@ -70,7 +76,7 @@ class CanvasView : NSView, Chip8Graphics
                 let pixelPosition = ((Int(currentY) * Int(Graphics.ScreenWidth)) + Int(currentX))
                 
                 // Set the didOverwrite flag if needed
-                if self.pixels[pixelPosition] == currentPixel && !didOverwrite
+                if currentPixel == true && self.pixels[pixelPosition] == currentPixel && !didOverwrite
                 {
                     didOverwrite = true
                 }
