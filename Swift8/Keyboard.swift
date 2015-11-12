@@ -16,18 +16,18 @@ class Keyboard
         18: 0x1, // 1
         19: 0x2, // 2
         20: 0x3, // 3
-        21: 0x4, // 4
-        12: 0x5, // q
-        13: 0x6, // w
-        14: 0x7, // e
-        15: 0x8, // r
-        0: 0x9, // a
-        1: 0x0, // s
-        2:  0xA, // d
-        3: 0xB, // f
-        6:  0xC, // z
-        7:  0xD, // x
-        8: 0xE, // c
+        21: 0xC, // 4
+        12: 0x4, // q
+        13: 0x5, // w
+        14: 0x6, // e
+        15: 0xD, // r
+        0:  0x7, // a
+        1:  0x8, // s
+        2:  0x9, // d
+        3:  0xE, // f
+        6:  0xA, // z
+        7:  0x0, // x
+        8:  0xB, // c
         9:  0xF, // v
     ]
     
@@ -41,6 +41,7 @@ class Keyboard
     
     func keyDown(event: NSEvent)
     {
+        
         // Setting the current key as the mapped key
         if let mappedKey = self.mapping[UInt8(event.keyCode)]
         {
