@@ -64,6 +64,12 @@ class Chip8
     let sound : Sound
     let keyboard : Keyboard
     
+    // The countdown timer will tick every 60ms
+    let timerDelay = dispatch_time(DISPATCH_TIME_NOW, Int64(1.0/60.0 * Double(NSEC_PER_SEC)))
+
+    // The CPU every ms
+    let CPUDelay = dispatch_time(DISPATCH_TIME_NOW, Int64(1.0/1000.0 * Double(NSEC_PER_SEC)))
+    
     // Mapping every opcode to a closure
     
     // Using the following info in the naming of the methods, the first part is the assembly name that would happen, after the underscore what is being moved, copied or checked
@@ -555,12 +561,17 @@ class Chip8
     func startLoop()
     {
         self.isRunning = true
-        self.loop()
+
+        // Start the timer loop
+        self.timerLoop()
+        
+        // And cpu cycle loop
+        self.CPUCycleLoop()
     }
     
     /**
-    * Stops the loop
-    */
+     * Stops the loop
+     */
     func stopLoop()
     {
         self.isRunning = false
@@ -579,27 +590,37 @@ class Chip8
     }
     
     /**
-     * The main loop
+     * The countdown timer loop
      */
-    private func loop()
+    private func timerLoop()
     {
-        // Handle the next instruction
-        self.tickInstruction()
+        if(self.isRunning)
+        {
+            // Make sure the timers countdown
+            self.countdownTimers()
+            
+            // Make sound if needed
+            self.makeNoise()
 
-        // Make sure the timers countdown
-        self.countdownTimers()
-        
-        // Make sound if needed
-        self.makeNoise()
-        
+            // And call self recursively after that delay
+            dispatch_after(self.timerDelay, dispatch_get_main_queue(), self.timerLoop)
+        }
+
+    }
+    
+    /**
+     * The CPU Cycle loop
+     */
+    private func CPUCycleLoop()
+    {
         // Determine if we should continue the loop
         if(self.isRunning)
         {
-            // Delaying one 60th of a second
-            let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(1.0/60.0 * Double(NSEC_PER_SEC)))
-            
+            // Handle the next instruction
+            self.tickInstruction()
+
             // And call self recursively after that delay
-            dispatch_after(delay, dispatch_get_main_queue(), self.loop)
+            dispatch_after(self.CPUDelay, dispatch_get_main_queue(), self.CPUCycleLoop)
         }
     }
     
