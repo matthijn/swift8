@@ -6,7 +6,7 @@ The technical document used writing the system can be found [here](http://devern
 
 ## ROMS
 
-Multiple games have been written for the CHIP-8 platform and are in the public domain. A number of these can be found on [DopeRoms](http://www.doperoms.com/roms/Chip-8.html). These include Space Invaders, Pong, Tetris and more.
+Multiple games have been written for the CHIP-8 platform and are in the public domain. A number of these can be found on [DopeRoms](http://www.doperoms.com/roms/Chip-8.html). These include Space Invaders, Pong, Tetris and more. A number of these ROMS can be found in the roms folder.
 
 ## Remarks
 This is my first attempt to emulate any system, for now I am still working on it. And hopefully one day it will actually be able to run any of the fore-mentioned ROMS.
