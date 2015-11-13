@@ -176,14 +176,15 @@ class Chip8
             Opcode(code: 0xF00A, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
                 
-                repeat
-                {
-                    if(self.keyboard.currentKey != -1)
-                    {
-                        self.V[registerX] = UInt8(self.keyboard.currentKey)
-                    }
-                }
-                    while(self.keyboard.currentKey == -1)
+                var pressedKey : Int8 = -1
+                
+                // Keep listening for the pressed key until we have it
+                repeat {
+                    pressedKey = self.keyboard.currentKey
+                } while(pressedKey == -1)
+                
+                // And store that key
+                self.V[registerX] = UInt8(pressedKey)
                 
             }),
             
