@@ -54,7 +54,7 @@ class Chip8ViewController: NSViewController
         openPanel.canCreateDirectories = false
         openPanel.allowsMultipleSelection = false
 
-        if openPanel.runModal() == NSOKButton
+        if openPanel.runModal() == NSModalResponseOK
         {
             // Make sure a file is selected
             if let file = openPanel.URLs.first
@@ -90,6 +90,11 @@ class Chip8ViewController: NSViewController
             self.chip?.load(rom, autostart: true)
         }
     }
-
+    
+    @IBAction func onSliderChange(sender: NSSlider)
+    {
+        self.chip?.changeSpeed(sender.doubleValue)
+    }
+    
 }
 

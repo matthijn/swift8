@@ -59,6 +59,9 @@ class Chip8
     // Flag to stop looping if needed
     var isRunning = false
     
+    // The speed at which the emulation runs
+    var speed = 500.0
+    
     // The peripherals
     let graphics : Graphics
     let sound : Sound
@@ -573,6 +576,14 @@ class Chip8
     }
     
     /**
+     * Changes the speed of the emulation
+     */
+    func changeSpeed(speed: Double)
+    {
+        self.speed = speed;
+    }
+    
+    /**
      * Loads the font sprite information in memory
      */
     private func loadFonts()
@@ -615,14 +626,14 @@ class Chip8
             self.tickInstruction()
 
             // And call self recursively after that delay
-            delay(1.0/500.0, closure: self.CPUCycleLoop)
+            delay(1.0 / self.speed, closure: self.CPUCycleLoop)
         }
     }
     
     /**
      * Wrapper for the dispatch_after to make it a bit more easy
      */
-    func delay(delay:Double, closure:()->()) {
+    func delay(delay: Double, closure: ()->()) {
         // Calculate delay
         let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)))
         
