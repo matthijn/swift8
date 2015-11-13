@@ -76,7 +76,7 @@ class CanvasView : NSView, Chip8Graphics
                 {
                     // Determine the index in the pixels array to change to the new pixel
                     let pixelPosition = ((Int(currentY) * Int(Graphics.ScreenWidth)) + Int(currentX))
-                    
+
                     // When drawing on the same spot twice the pixel gets changed to blank if there is a pixel there
                     if currentPixel == true && self.pixels[pixelPosition] == true
                     {

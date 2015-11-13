@@ -1,0 +1,3 @@
+Blinky by Hans Christian Egeberg, 1991
+
+Pacman clone. Use 3 and 6 to move up and down, 7 and 8 to move left and right.

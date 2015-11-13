@@ -1,0 +1,3 @@
+Tic Tac Toe by David Winter
+
+Use the keys starting from top left to place the tic or tac in the right field and make three in a row.

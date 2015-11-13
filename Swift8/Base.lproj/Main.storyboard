@@ -102,7 +102,7 @@
                                 </textFieldCell>
                             </textField>
                             <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3KV-63-vYI">
-                                <rect key="frame" x="210" y="10" width="96" height="21"/>
+                                <rect key="frame" x="210" y="10" width="96" height="20"/>
                                 <animations/>
                                 <sliderCell key="cell" state="on" alignment="left" minValue="1" maxValue="1000" doubleValue="500" tickMarkPosition="above" sliderType="linear" id="BIb-8b-AmQ"/>
                                 <connections>

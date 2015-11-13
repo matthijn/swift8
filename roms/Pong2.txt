@@ -1,0 +1,3 @@
+Pong for tow players, use 1 and 4 to move player one, a and b to move player two.
+
+By David Winter
