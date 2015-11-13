@@ -132,7 +132,7 @@ class Chip8
                     // Store it
                     self.memory[index] = currentValue
                     
-                    // Divide by ten zo in the next run the second smallest digit is the new smallest digit
+                    // Divide by ten so in the next run the second smallest digit is the new smallest digit
                     valueX /= 10
                 }
             }),
@@ -176,11 +176,13 @@ class Chip8
                 // Keep listening for the pressed key until we have it
                 repeat {
                     pressedKey = self.keyboard.currentKey
-                } while(pressedKey == -1)
+                } while(pressedKey == -1 && self.isRunning)
                 
-                // And store that key
-                self.V[registerX] = UInt8(pressedKey)
-                
+                // And store that key (only if we stopped because of key press, not because of ending the current interpretation)
+                if(pressedKey != -1)
+                {
+                    self.V[registerX] = UInt8(pressedKey)
+                }
             }),
             
             // LD_V_DT (Set the register V to the value in delay timer)
@@ -613,7 +615,7 @@ class Chip8
             self.tickInstruction()
 
             // And call self recursively after that delay
-            delay(1.0/750.0, closure: self.CPUCycleLoop)
+            delay(1.0/500.0, closure: self.CPUCycleLoop)
         }
     }
     
