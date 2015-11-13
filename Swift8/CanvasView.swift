@@ -71,23 +71,27 @@ class CanvasView : NSView, Chip8Graphics
                 // Shift left so the next round we get the new next bit
                 spriteByte = spriteByte << 1
                 
-                // Determine the index in the pixels array to change to the new pixel
-                let pixelPosition = ((Int(currentY) * Int(Graphics.ScreenWidth)) + Int(currentX))
-                
-                // When drawing on the same spot twice the pixel gets changed to blank if there is a pixel there
-                if currentPixel == true && self.pixels[pixelPosition] == true
+                // Only draw or clear if the current pixel should be changed
+                if currentPixel
                 {
-                    currentPixel = false
+                    // Determine the index in the pixels array to change to the new pixel
+                    let pixelPosition = ((Int(currentY) * Int(Graphics.ScreenWidth)) + Int(currentX))
                     
-                    // Change the didOverwrite flag to reflect that a pixel in this draw session has been overwritten
-                    if !didOverwrite
+                    // When drawing on the same spot twice the pixel gets changed to blank if there is a pixel there
+                    if currentPixel == true && self.pixels[pixelPosition] == true
                     {
-                        didOverwrite = true
+                        currentPixel = false
+                        
+                        // Change the didOverwrite flag to reflect that a pixel in this draw session has been overwritten
+                        if !didOverwrite
+                        {
+                            didOverwrite = true
+                        }
                     }
+                    
+                    // Store the new pixel informatio on the correct position
+                    self.pixels[pixelPosition] = currentPixel
                 }
-                
-                // Store the new pixel informatio on the correct position
-                self.pixels[pixelPosition] = currentPixel
             }
         }
         
