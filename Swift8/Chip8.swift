@@ -64,11 +64,8 @@ class Chip8
     let sound : Sound
     let keyboard : Keyboard
     
-    // The countdown timer will tick every 60ms
-    let timerDelay = dispatch_time(DISPATCH_TIME_NOW, Int64(1.0/60.0 * Double(NSEC_PER_SEC)))
-
-    // The CPU every ms
-    let CPUDelay = dispatch_time(DISPATCH_TIME_NOW, Int64(1.0/1000.0 * Double(NSEC_PER_SEC)))
+    // The queue we are calculating on so we don't have it on the main graphics thread
+    let dispatchQueue = dispatch_queue_create("nl.indev.chip8", nil);
     
     // Mapping every opcode to a closure
     
@@ -603,7 +600,7 @@ class Chip8
             self.makeNoise()
 
             // And call self recursively after that delay
-            dispatch_after(self.timerDelay, dispatch_get_main_queue(), self.timerLoop)
+            delay(1.0/60.0, closure: self.timerLoop)
         }
 
     }
@@ -620,8 +617,19 @@ class Chip8
             self.tickInstruction()
 
             // And call self recursively after that delay
-            dispatch_after(self.CPUDelay, dispatch_get_main_queue(), self.CPUCycleLoop)
+            delay(1.0/750.0, closure: self.CPUCycleLoop)
         }
+    }
+    
+    /**
+     * Wrapper for the dispatch_after to make it a bit more easy
+     */
+    func delay(delay:Double, closure:()->()) {
+        // Calculate delay
+        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)))
+        
+        // And add to queue
+        dispatch_after(delay, self.dispatchQueue, closure)
     }
     
     /**
