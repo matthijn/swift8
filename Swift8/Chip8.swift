@@ -93,13 +93,10 @@ class Chip8
                 for var currentRegister = 0; currentRegister <= registerX; currentRegister++
                 {
                     // Get the byte from memory
-                    let memoryByte = self.memory[Int(self.I)]
+                    let memoryByte = self.memory[Int(self.I) + currentRegister]
                     
                     // Store it in current register
                     self.V[currentRegister] = memoryByte
-                    
-                    // And increment the I register memory address
-                    self.I++
                 }
             }),
             
@@ -113,9 +110,7 @@ class Chip8
                     let registerByte = self.V[currentRegister]
                     
                     // Store it in memory
-                    self.memory[Int(self.I)] = registerByte
-                    
-                    self.I++
+                    self.memory[Int(self.I) + currentRegister] = registerByte
                 }
             }),
             
@@ -188,7 +183,7 @@ class Chip8
                 
             }),
             
-            // LD_V_DT (Set the register V to the value in dt)
+            // LD_V_DT (Set the register V to the value in delay timer)
             Opcode(code: 0xF007, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
                 self.V[registerX] = self.delayTimer
@@ -641,7 +636,7 @@ class Chip8
         // Get current block to run from memory everything which is stored in blocks of two bytes containing both the opcode and "parameters"
         let memoryBlock = UInt16(self.memory[Int(self.pc)]) << 8 | UInt16(self.memory[Int(self.pc + 1)])
 
-        print("Memory value at PC \(self.pc) \(String(memoryBlock, radix: 16))")
+//        print("Memory value at PC \(self.pc) \(String(memoryBlock, radix: 16))")
         
         // Increment the program counter
         self.pc+=2
@@ -655,7 +650,7 @@ class Chip8
             if (memoryBlock & opcode) == opcode
             {
                 
-                print("Memory matches opcode \(String(opcode, radix: 16))")
+//                print("Memory matches opcode \(String(opcode, radix: 16))")
 
                 // Call the closure
                 mapping.callback(memoryBlock)

@@ -41,7 +41,6 @@ class Keyboard
     
     func keyDown(event: NSEvent)
     {
-        
         // Setting the current key as the mapped key
         if let mappedKey = self.mapping[UInt8(event.keyCode)]
         {
