@@ -10,9 +10,9 @@ import Cocoa
 
 class CanvasView : NSView, Chip8Graphics
 {
-    // The original Chip8 system colors
-    let backgroundColor = NSColor.blackColor()
-    let foregroundColor = NSColor.whiteColor()
+    // The colors to draw
+    let backgroundColor = NSColor(calibratedRed: 0.69, green: 0.37, blue: 0, alpha: 1)
+    let foregroundColor = NSColor(calibratedRed: 1, green: 0.77, blue: 0, alpha: 1)
 
     // One pixel on the original Chip8 system will be mapped to this number of points in OSX so everything is not super tiny, since original screen was 64x32 pixels
     let pixelSize : CGFloat = 10
@@ -28,7 +28,6 @@ class CanvasView : NSView, Chip8Graphics
     func clear()
     {
         self.pixels = [Bool](count: Int(Graphics.ScreenWidth * Graphics.ScreenHeight), repeatedValue: false)
-        
         self.setNeedsDisplayInRect(self.bounds)
     }
     
