@@ -32,6 +32,9 @@ class Chip8
     // The location from where roms are loaded
     static let RomLocation : UInt16 = 0x200
     
+    // Will hold the current rom
+    var rom : NSData?
+    
     // Will hold the memory
     var memory = [UInt8](count: Chip8.MemorySize, repeatedValue: 0)
     
@@ -504,15 +507,18 @@ class Chip8
     /**
      * Load data into memory
      */
-    func load(data: NSData, autostart : Bool = true)
+    func load(rom: NSData, autostart : Bool = true)
     {
+        // Keep track of the rom
+        self.rom = rom
+        
         // Change to a state in which we can load
         self.stopLoop()
         self.reset()
         
         // Converting NSData to byte array
-        var bytesArray = [UInt8](count: data.length, repeatedValue: 0)
-        data.getBytes(&bytesArray, length: data.length)
+        var bytesArray = [UInt8](count: rom.length, repeatedValue: 0)
+        rom.getBytes(&bytesArray, length: rom.length)
         
         // Getting each byte and moving it to the correct spot in memory
         for (index, byte) in bytesArray.enumerate()
@@ -525,6 +531,14 @@ class Chip8
         {
             self.startLoop()
         }
+    }
+    
+    /**
+     * Reloads the current rom again 
+     */
+    func resetRom(autostart: Bool)
+    {
+        self.load(self.rom!, autostart: autostart)
     }
     
     /**

@@ -11,16 +11,28 @@ import Cocoa
 class Chip8ViewController: NSViewController
 {
  
+    // Holds the chip 8 emulator system
     var chip : Chip8?
+    
+    // Limiting how fast the emulator can run
+    let minSpeed = 50.0
+    let maxSpeed = 1000.0
+    
+    let speedStep = 50.0
+    
+    // Current speed at which the emulator runs
+    var currentSpeed : Double {
+        get {
+            return (self.chip?.speed)!
+        }
+    }
     
     var chip8View : Chip8View {
         get {
             return self.view as! Chip8View
         }
     }
-    
-    var loadedRom : NSData?
-    
+
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -34,67 +46,26 @@ class Chip8ViewController: NSViewController
         // Create the chip system
         self.chip = Chip8(graphics: graphics, sound: Sound(), keyboard: keyboard)
     }
-
-    override var representedObject: AnyObject?
-    {
-        didSet
-        {
-            print(self.view.window)
-            // Update the view, if already loaded.
-        }
-    }
-
-    // MARK: User interaction
     
-    @IBAction func onLoadButton(sender: AnyObject)
+    func loadRom(rom: NSData, autostart: Bool)
     {
-        // Show a file dialog
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseDirectories = false
-        openPanel.canCreateDirectories = false
-        openPanel.allowsMultipleSelection = false
-
-        if openPanel.runModal() == NSModalResponseOK
-        {
-            // Make sure a file is selected
-            if let file = openPanel.URLs.first
-            {
-                // Try to read the file
-                self.loadedRom = NSData(contentsOfFile:file.path!)
-
-                if let rom = self.loadedRom
-                {
-                    // Update the title
-                    self.view.window?.title = "Swift8 - " + file.absoluteString.componentsSeparatedByString("/").last!
-
-                    // And load the data
-                    self.chip?.load(rom, autostart: true)
-                }
-                // Something went wrong, show an alert
-                else
-                {
-                    let alert = NSAlert()
-                    alert.addButtonWithTitle("OK")
-                    alert.messageText = "Could not read the selected file."
-                    alert.alertStyle = .WarningAlertStyle
-                    alert.beginSheetModalForWindow(self.view.window!, completionHandler: nil)
-                }
-            }
-        }
-    }
-
-    @IBAction func onResetButton(sender: AnyObject)
-    {
-        if let rom = self.loadedRom
-        {
-            self.chip?.load(rom, autostart: true)
-        }
+        self.chip?.load(rom, autostart: true)
     }
     
-    @IBAction func onSliderChange(sender: NSSlider)
+    func resetRom()
     {
-        self.chip?.changeSpeed(sender.doubleValue)
+        self.chip?.resetRom(true)
     }
     
+    func increaseSpeed()
+    {
+        self.chip?.speed = min(self.currentSpeed + self.speedStep, self.maxSpeed)
+    }
+    
+    func decreaseSpeed()
+    {
+        self.chip?.speed = max(self.currentSpeed - 100, self.minSpeed)
+    }
+
 }
 

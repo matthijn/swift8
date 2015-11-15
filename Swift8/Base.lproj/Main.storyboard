@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15A279b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15A279b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9059"/>
     </dependencies>
@@ -29,13 +29,75 @@
                                     </items>
                                 </menu>
                             </menuItem>
+                            <menuItem title="File" id="lvE-Q5-TsT">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="File" id="1fh-RE-hKR">
+                                    <items>
+                                        <menuItem title="Open…" keyEquivalent="o" id="W4Y-kA-ewe">
+                                            <connections>
+                                                <action selector="onOpenButton:" target="Voe-Tx-rLC" id="dcs-nS-oGa"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Open Recent" id="K1H-0M-Wkk">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Open Recent" systemMenu="recentDocuments" id="72P-dE-3x0">
+                                                <items>
+                                                    <menuItem title="Clear Menu" id="gVd-Mw-sku">
+                                                        <connections>
+                                                            <action selector="clearRecentDocuments:" target="Ady-hI-5gd" id="akw-Ym-lUp"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="9zb-oo-151"/>
+                                        <menuItem title="Reset" keyEquivalent="r" id="OLg-am-VVU">
+                                            <connections>
+                                                <action selector="onResetButton:" target="Voe-Tx-rLC" id="igA-0H-yfS"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Rendering" id="DXw-g1-bvL">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Rendering" id="hVH-Gf-Ixh">
+                                    <items>
+                                        <menuItem title="Theme" id="BKy-hl-Seb">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Theme" id="w6R-Vk-IKm"/>
+                                        </menuItem>
+                                        <menuItem title="Speed" id="UR3-wL-2DP">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <menu key="submenu" title="Speed" id="yLs-7n-Yzw">
+                                                <items>
+                                                    <menuItem title="Increase" keyEquivalent="]" id="3LM-eY-nob">
+                                                        <connections>
+                                                            <action selector="onIncreaseSpeedButton:" target="Voe-Tx-rLC" id="7MI-Fc-APp"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="Decrease" keyEquivalent="[" id="Xbo-85-rZJ">
+                                                        <connections>
+                                                            <action selector="onDecreaseSpeedButton:" target="Voe-Tx-rLC" id="brh-Hc-nqr"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
                         </items>
                     </menu>
                     <connections>
                         <outlet property="delegate" destination="Voe-Tx-rLC" id="PrD-fu-P6m"/>
                     </connections>
                 </application>
-                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Swift8" customModuleProvider="target"/>
+                <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Swift8" customModuleProvider="target">
+                    <connections>
+                        <outlet property="themeMenu" destination="BKy-hl-Seb" id="sSV-Jk-uQb"/>
+                    </connections>
+                </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="75" y="0.0"/>
@@ -43,12 +105,16 @@
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">
             <objects>
-                <windowController showSeguePresentationStyle="single" id="B8D-0N-5wS" sceneMemberID="viewController">
+                <windowController storyboardIdentifier="MainWindowController" showSeguePresentationStyle="single" id="B8D-0N-5wS" customClass="Chip8WindowController" customModule="Swift8" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="Swift8" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-                        <rect key="contentRect" x="196" y="240" width="480" height="270"/>
+                        <rect key="contentRect" x="620" y="358" width="640" height="320"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
+                        <value key="minSize" type="size" width="640" height="320"/>
+                        <connections>
+                            <outlet property="delegate" destination="B8D-0N-5wS" id="CYS-J0-IHg"/>
+                        </connections>
                     </window>
                     <connections>
                         <segue destination="XfG-lQ-9wD" kind="relationship" relationship="window.shadowedContentViewController" id="cq2-FE-JQM"/>
@@ -63,68 +129,23 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="Chip8ViewController" customModule="Swift8" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl" customClass="Chip8View" customModule="Swift8" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="640" height="360"/>
+                        <rect key="frame" x="0.0" y="0.0" width="640" height="320"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="Gdf-HG-qTf" customClass="CanvasView" customModule="Swift8" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="40" width="640" height="320"/>
+                                <rect key="frame" x="0.0" y="0.0" width="640" height="320"/>
                                 <animations/>
                             </customView>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="p2M-q5-WRv">
-                                <rect key="frame" x="14" y="2" width="70" height="32"/>
-                                <animations/>
-                                <buttonCell key="cell" type="push" title="Load" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gFW-sT-WOl">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <connections>
-                                        <action selector="onLoadButton:" target="XfG-lQ-9wD" id="2mv-w4-bWo"/>
-                                    </connections>
-                                </buttonCell>
-                            </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QRx-7N-ZCU">
-                                <rect key="frame" x="84" y="2" width="75" height="32"/>
-                                <animations/>
-                                <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kds-4Y-MpI">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                    <connections>
-                                        <action selector="onResetButton:" target="XfG-lQ-9wD" id="gqY-h3-2DH"/>
-                                    </connections>
-                                </buttonCell>
-                            </button>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hFe-J9-EdK">
-                                <rect key="frame" x="159" y="13" width="47" height="17"/>
-                                <animations/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Speed:" id="h6a-qL-sJc">
-                                    <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                </textFieldCell>
-                            </textField>
-                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3KV-63-vYI">
-                                <rect key="frame" x="210" y="10" width="96" height="20"/>
-                                <animations/>
-                                <sliderCell key="cell" state="on" alignment="left" minValue="1" maxValue="1000" doubleValue="500" tickMarkPosition="above" sliderType="linear" id="BIb-8b-AmQ"/>
-                                <connections>
-                                    <action selector="onSliderChange:" target="XfG-lQ-9wD" id="NzL-rv-us1"/>
-                                </connections>
-                            </slider>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="QRx-7N-ZCU" firstAttribute="top" secondItem="Gdf-HG-qTf" secondAttribute="bottom" constant="10" id="EW2-Qz-p7T"/>
-                            <constraint firstAttribute="trailing" secondItem="Gdf-HG-qTf" secondAttribute="trailing" id="IdE-u8-EXn"/>
-                            <constraint firstItem="QRx-7N-ZCU" firstAttribute="leading" secondItem="p2M-q5-WRv" secondAttribute="trailing" constant="12" id="ZVb-Np-fYe"/>
-                            <constraint firstItem="p2M-q5-WRv" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" constant="20" id="efB-cb-N1b"/>
-                            <constraint firstItem="Gdf-HG-qTf" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="hQe-dq-z9K"/>
-                            <constraint firstAttribute="bottom" secondItem="p2M-q5-WRv" secondAttribute="bottom" constant="9" id="m49-CW-bLL"/>
-                            <constraint firstAttribute="bottom" secondItem="QRx-7N-ZCU" secondAttribute="bottom" constant="9" id="uDx-HA-s9p"/>
-                            <constraint firstItem="Gdf-HG-qTf" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="ueV-jK-MDD"/>
+                            <constraint firstItem="Gdf-HG-qTf" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" id="K2j-EN-JZM"/>
+                            <constraint firstAttribute="trailing" secondItem="Gdf-HG-qTf" secondAttribute="trailing" id="NFF-hw-MaH"/>
+                            <constraint firstAttribute="bottom" secondItem="Gdf-HG-qTf" secondAttribute="bottom" id="a5B-8Y-YAL"/>
+                            <constraint firstItem="Gdf-HG-qTf" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="erI-Ae-ne9"/>
                         </constraints>
                         <animations/>
                         <connections>
                             <outlet property="canvasView" destination="Gdf-HG-qTf" id="xPh-6V-2pL"/>
-                            <outlet property="loadButton" destination="p2M-q5-WRv" id="hav-ez-AJW"/>
-                            <outlet property="resetButton" destination="QRx-7N-ZCU" id="gp5-Ra-6es"/>
                         </connections>
                     </view>
                 </viewController>
