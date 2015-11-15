@@ -11,74 +11,49 @@ import Cocoa
 class Settings
 {
     // Defaulting to standardUserDefaults and defaultCenter to save and broadcast the settings information
-    let sharedSettings = Settings(defaults: NSUserDefaults.standardUserDefaults(), notificationCenter: NSNotificationCenter.defaultCenter())
+    static let sharedSettings = Settings(defaults: NSUserDefaults.standardUserDefaults())
 
     // Using NSUserdefaults to store the information
     let defaults : NSUserDefaults
 
-    // And a notification center to broadcast changes
-    let notificationCenter : NSNotificationCenter
-    
-    init(defaults: NSUserDefaults, notificationCenter: NSNotificationCenter)
+    init(defaults: NSUserDefaults)
     {
         self.defaults = defaults
-        self.notificationCenter = notificationCenter
     }
     
     // MARK: The settings
 
     var theme : Theme {
         get {
-            return self.getSetting("theme", type: "object") as! Theme
+            if let backgroundColor = self.defaults.colorForKey("backgroundColor"), let foregroundColor = self.defaults.colorForKey("foregroundColor")
+            {
+                return Theme(name: "Settings", backgroundColor: backgroundColor, foregroundColor: foregroundColor)
+            }
+            return Themes.defaultTheme
         }
         set {
-            self.setSetting("theme", value: newValue, type: "object")
+            self.defaults.setColor(theme.backgroundColor, forKey: "backgroundColor")
+            self.defaults.setColor(theme.foregroundColor, forKey: "foregroundColor")
+            self.defaults.synchronize()
         }
     }
 
     var renderSpeed : Double {
         get {
-            return self.getSetting("renderSpeed", type: "double") as! Double
+            let settingSpeed = self.defaults.doubleForKey("renderSpeed")
+            
+            if settingSpeed > 0
+            {
+                return settingSpeed
+            }
+            
+            return 500.0
         }
         set
         {
-            self.setSetting("renderSpeed", value: newValue, type: "double")
+            self.defaults.setDouble(newValue, forKey: "renderSpeed")
+            self.defaults.synchronize()
         }
     }
-    
-    // MARK: Saving and Fetching
-    
-    /**
-     * Fetches a setting from the defaults
-     */
-    private func getSetting(key: String, type: String) -> AnyObject
-    {
-        let fetchSelector = Selector("\(type)ForKey:")
-        return self.defaults.performSelector(fetchSelector, withObject: key).takeUnretainedValue()
-    }
-    
-    /**
-     * Saves a setting in the defaults and notifies the app of the change
-     */
-    private func setSetting(key: String, value: AnyObject, type: String)
-    {
-        // Save
-        let saveSelector = Selector("set\(type.upperCaseFirst)ForKey:")
-        self.defaults.performSelector(saveSelector, withObject: value)
-        
-        // Synchronize
-        self.defaults.synchronize();
-        
-        // Broadcast change
-        self.broadcastChange(key, newValue: value)
-    }
-    
-    /**
-     * Notify the app of the change
-     */
-    private func broadcastChange(key: String, newValue: AnyObject)
-    {
-        self.notificationCenter.postNotificationName(key, object: self, userInfo: newValue as? [NSObject : AnyObject])
-    }
-    
+
 }

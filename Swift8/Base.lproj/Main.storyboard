@@ -95,7 +95,7 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Swift8" customModuleProvider="target">
                     <connections>
-                        <outlet property="themeMenu" destination="BKy-hl-Seb" id="sSV-Jk-uQb"/>
+                        <outlet property="themeMenu" destination="w6R-Vk-IKm" id="C0Z-2q-kXC"/>
                     </connections>
                 </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>

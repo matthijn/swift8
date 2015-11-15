@@ -16,6 +16,8 @@ class AppDelegate: NSObject, NSApplicationDelegate
 
     func applicationDidFinishLaunching(aNotification: NSNotification)
     {
+        Settings.sharedSettings.renderSpeed = 10.0
+
         // Setup theme menu
         self.setupThemes()
         
@@ -27,7 +29,21 @@ class AppDelegate: NSObject, NSApplicationDelegate
     
     func setupThemes()
     {
-
+        self.themeMenu.autoenablesItems = false
+        
+        // Iterate over all themes and create a menu item for them
+        for theme in Themes.availableThemes
+        {
+            // Create the menu item
+            let menuItem = NSMenuItem(title: theme.name, action: Selector("onThemeButton:"), keyEquivalent: String(theme.name[theme.name.startIndex]))
+            
+            menuItem.enabled = true
+            menuItem.target = self
+            menuItem.representedObject = theme
+            
+            // And add to the menu
+            self.themeMenu.addItem(menuItem)
+        }
     }
 
     func applicationWillTerminate(aNotification: NSNotification)
@@ -47,6 +63,11 @@ class AppDelegate: NSObject, NSApplicationDelegate
     @IBAction func onDecreaseSpeedButton(sender: AnyObject)
     {
         self.windowController.onDecreaseSpeedButton(sender)
+    }
+    
+    func onThemeButton(sender: AnyObject)
+    {
+        self.windowController.onThemeButton(sender)
     }
     
     // MARK: File Menu

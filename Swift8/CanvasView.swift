@@ -11,8 +11,11 @@ import Cocoa
 class CanvasView : NSView, Chip8Graphics
 {
     // The colors to draw
-    let backgroundColor = NSColor(calibratedRed: 0.69, green: 0.37, blue: 0, alpha: 1)
-    let foregroundColor = NSColor(calibratedRed: 1, green: 0.77, blue: 0, alpha: 1)
+    var theme = Themes.defaultTheme {
+        didSet {
+            self.setNeedsDisplayInRect(self.bounds)
+        }
+    }
 
     // One pixel on the original Chip8 system will be mapped to this number of points in OSX so everything is not super tiny, since original screen was 64x32 pixels
     let pixelSize : CGFloat = 10
@@ -111,7 +114,7 @@ class CanvasView : NSView, Chip8Graphics
     {   
         // Todo: Determine which parts need to be drawn for increased performance instead of drawing all
 
-       var colorToDraw = self.backgroundColor
+       var colorToDraw = self.theme.backgroundColor
         
         // Iterate over every row
         for var y : CGFloat = 0; y < Graphics.ScreenHeight; y++
@@ -125,7 +128,7 @@ class CanvasView : NSView, Chip8Graphics
                 let pixelState = self.pixels[pixelIndex]
 
                 // Determine color to draw for this pixel
-                colorToDraw = (pixelState) ? self.foregroundColor : self.backgroundColor
+                colorToDraw = (pixelState) ? self.theme.foregroundColor : self.theme.backgroundColor
                 colorToDraw.set()
 
                 // Determine the NSView location to draw, NSView works from bottom left while Chip8 works from top left

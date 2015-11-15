@@ -72,5 +72,11 @@ class Chip8WindowController : NSWindowController, NSWindowDelegate
     {
         self.chip8ViewController.decreaseSpeed()
     }
+    
+    func onThemeButton(sender: AnyObject)
+    {
+        let theme = sender.representedObject as! Theme
+        self.chip8ViewController.changeTheme(theme)
+    }
 
 }
