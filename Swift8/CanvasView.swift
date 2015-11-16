@@ -17,8 +17,16 @@ class CanvasView : NSView, Chip8Graphics
         }
     }
 
-    // One pixel on the original Chip8 system will be mapped to this number of points in OSX so everything is not super tiny, since original screen was 64x32 pixels
-    let pixelSize : CGFloat = 10
+    // Calculating how big each pixel should be drawn based on current view size (original screen size is 64 x 32 pixels, which is puny)
+    var pixelSize : CGFloat {
+        get {
+            let widthRatio = self.frame.size.width / 2
+            let heightRatio = self.frame.size.height / 1
+            
+            let pixelSize = min(widthRatio, heightRatio) / Graphics.ScreenHeight
+            return pixelSize
+        }
+    }
 
     // Every bool will light up one pixel if it is true
     var pixels = [Bool](count: Int(Graphics.ScreenWidth * Graphics.ScreenHeight), repeatedValue: false)
@@ -113,8 +121,19 @@ class CanvasView : NSView, Chip8Graphics
     override func drawRect(dirtyRect: NSRect)
     {   
         // Todo: Determine which parts need to be drawn for increased performance instead of drawing all
-
-       var colorToDraw = self.theme.backgroundColor
+        self.fillBackgroundInRect(dirtyRect)
+        
+        // No need to recalculate it every time
+        let calculatedPixelSize = self.pixelSize
+        
+        // Calculate the offsets to make sure the drawing is always centered
+        let renderWidth = self.pixelSize * Graphics.ScreenWidth
+        let renderHeight = self.pixelSize * Graphics.ScreenHeight
+        
+        let offsetY = (self.frame.size.height - renderHeight) / 2
+        let offsetX = (self.frame.size.width - renderWidth) / 2
+        
+        var colorToDraw = self.theme.backgroundColor
         
         // Iterate over every row
         for var y : CGFloat = 0; y < Graphics.ScreenHeight; y++
@@ -132,17 +151,23 @@ class CanvasView : NSView, Chip8Graphics
                 colorToDraw.set()
 
                 // Determine the NSView location to draw, NSView works from bottom left while Chip8 works from top left
-                let canvasX = x * self.pixelSize
-                let canvasY = (Graphics.ScreenHeight * self.pixelSize) - (y * self.pixelSize) - self.pixelSize
+                let canvasX = (x * self.pixelSize) + offsetX
+                let canvasY = ((Graphics.ScreenHeight * calculatedPixelSize) - (y * calculatedPixelSize) - calculatedPixelSize) + offsetY
 
-                let rectToDraw = CGRectMake(canvasX, canvasY, self.pixelSize,
-                    self.pixelSize)
+                // Making the pixel size a tiny bit smaller, since that looks more cool
+                let rectToDraw = CGRectMake(canvasX, canvasY, calculatedPixelSize - 1, calculatedPixelSize - 1)
 
                 // And draw
                 NSRectFill(rectToDraw)
             }
         }
         
+    }
+    
+    func fillBackgroundInRect(rect: NSRect)
+    {
+        self.theme.backgroundColor.set()
+        NSRectFill(rect)
     }
     
 }
