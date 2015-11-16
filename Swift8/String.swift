@@ -25,5 +25,5 @@ extension String
             return toUpperCase
         }
     }
-    
+
 }

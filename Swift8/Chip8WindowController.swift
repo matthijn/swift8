@@ -40,7 +40,9 @@ class Chip8WindowController : NSWindowController, NSWindowDelegate
                 if let rom = NSData(contentsOfFile:file.path!)
                 {
                     // Update the title
-                    self.window!.title = "Swift8 - " + file.absoluteString.componentsSeparatedByString("/").last!
+                    let name = file.URLByDeletingPathExtension?.lastPathComponent?.stringByRemovingPercentEncoding
+                    
+                    self.window!.title = "Swift8 - " + name!
                     
                     // And load the rom
                     self.chip8ViewController.loadRom(rom, autostart: true)
