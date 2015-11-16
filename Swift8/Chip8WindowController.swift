@@ -27,7 +27,8 @@ class Chip8WindowController : NSWindowController, NSWindowDelegate
         openPanel.canChooseDirectories = false
         openPanel.canCreateDirectories = false
         openPanel.allowsMultipleSelection = false
-        
+        openPanel.allowedFileTypes = ["ch8"]
+
         if openPanel.runModal() == NSModalResponseOK
         {
             // Make sure a file is selected
@@ -81,4 +82,8 @@ class Chip8WindowController : NSWindowController, NSWindowDelegate
         self.chip8ViewController.changeTheme(theme)
     }
 
+    func onFullScreenButton(sender: AnyObject)
+    {
+//        self.chip8ViewController.view.enterFullScreenMode(NSScreen.mainScreen()!, withOptions: nil)
+    }
 }
