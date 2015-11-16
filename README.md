@@ -4,7 +4,7 @@ Swift8 is a [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8) emulator written in S
 
 The technical document used writing the system can be found [here](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM). More comprehensive information can be found [here](http://laurencescotford.co.uk/?p=242).
 
-![](images/space.png?raw=true)
+![](images/screens.png?raw=true)
 
 ## ROMS
 
