@@ -84,6 +84,12 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
+                                        <menuItem title="Enter Full Screen" keyEquivalent="f" id="NW9-4b-nS1">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="onFullScreenButton:" target="Voe-Tx-rLC" id="VqP-nm-Jfo"/>
+                                            </connections>
+                                        </menuItem>
                                     </items>
                                 </menu>
                             </menuItem>
@@ -100,7 +106,7 @@
                 </customObject>
                 <customObject id="Ady-hI-5gd" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="0.0"/>
+            <point key="canvasLocation" x="75.5" y="-65"/>
         </scene>
         <!--Window Controller-->
         <scene sceneID="R2V-B0-nI4">

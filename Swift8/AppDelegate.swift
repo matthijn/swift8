@@ -70,6 +70,11 @@ class AppDelegate: NSObject, NSApplicationDelegate
         self.windowController.onThemeButton(sender)
     }
     
+    @IBAction func onFullScreenButton(sender: AnyObject)
+    {
+        self.windowController.onFullScreenButton(sender)
+    }
+    
     // MARK: File Menu
     
     @IBAction func onOpenButton(sender: AnyObject)
@@ -81,5 +86,6 @@ class AppDelegate: NSObject, NSApplicationDelegate
     {
         self.windowController.onResetButton(self)
     }
+
 }
 
