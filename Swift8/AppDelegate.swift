@@ -85,5 +85,19 @@ class AppDelegate: NSObject, NSApplicationDelegate
         self.windowController.onResetButton(self)
     }
 
+    func application(sender: NSApplication, openFile filename: String) -> Bool
+    {
+        let url = NSURL(fileURLWithPath: filename)
+        
+        if url.pathExtension == "ch8"
+        {
+            self.windowController.loadPath(url)
+            return true
+        }
+
+        NSAlert.showSimpleWarning("Cannot open this type of file.", inWindow: self.windowController.window!)
+        return false
+    }
+
 }
 
