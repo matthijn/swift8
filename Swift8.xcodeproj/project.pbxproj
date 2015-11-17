@@ -11,6 +11,7 @@
 		830A1E8C1BF73EE900BA84CD /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830A1E8B1BF73EE900BA84CD /* Settings.swift */; };
 		831DCE271BF8A6EF0099EFFE /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831DCE261BF8A6EF0099EFFE /* String.swift */; };
 		8321C2061BFB870E00374804 /* NSAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8321C2051BFB870E00374804 /* NSAlert.swift */; };
+		8321C20A1BFB8D0000374804 /* document-icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 8321C2091BFB8D0000374804 /* document-icon.icns */; };
 		835825341BF8BB3A00A27527 /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835825331BF8BB3A00A27527 /* Themes.swift */; };
 		835825361BF8C47300A27527 /* Chip8WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835825351BF8C47300A27527 /* Chip8WindowController.swift */; };
 		839D2F061B876E2A008623FC /* Chip8View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D2F051B876E2A008623FC /* Chip8View.swift */; };
@@ -30,6 +31,7 @@
 		830A1E8B1BF73EE900BA84CD /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		831DCE261BF8A6EF0099EFFE /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		8321C2051BFB870E00374804 /* NSAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSAlert.swift; sourceTree = "<group>"; };
+		8321C2091BFB8D0000374804 /* document-icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "document-icon.icns"; sourceTree = "<group>"; };
 		835825331BF8BB3A00A27527 /* Themes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
 		835825351BF8C47300A27527 /* Chip8WindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chip8WindowController.swift; sourceTree = "<group>"; };
 		839D2F051B876E2A008623FC /* Chip8View.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chip8View.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 		83AB8BC11B80E6570062010E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8321C2091BFB8D0000374804 /* document-icon.icns */,
 				83AB8BB51B80E5530062010E /* Assets.xcassets */,
 				83AB8BB71B80E5530062010E /* Main.storyboard */,
 				83AB8BBA1B80E5530062010E /* Info.plist */,
@@ -202,6 +205,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8321C20A1BFB8D0000374804 /* document-icon.icns in Resources */,
 				83AB8BB61B80E5530062010E /* Assets.xcassets in Resources */,
 				83AB8BB91B80E5530062010E /* Main.storyboard in Resources */,
 			);
