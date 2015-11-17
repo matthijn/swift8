@@ -32,8 +32,8 @@ class Settings
             return Themes.defaultTheme
         }
         set {
-            self.defaults.setColor(theme.backgroundColor, forKey: "backgroundColor")
-            self.defaults.setColor(theme.foregroundColor, forKey: "foregroundColor")
+            self.defaults.setColor(newValue.backgroundColor, forKey: "backgroundColor")
+            self.defaults.setColor(newValue.foregroundColor, forKey: "foregroundColor")
             self.defaults.synchronize()
         }
     }
@@ -41,7 +41,7 @@ class Settings
     var renderSpeed : Double {
         get {
             let settingSpeed = self.defaults.doubleForKey("renderSpeed")
-            
+                        
             if settingSpeed > 0
             {
                 return settingSpeed

@@ -16,8 +16,6 @@ class AppDelegate: NSObject, NSApplicationDelegate
 
     func applicationDidFinishLaunching(aNotification: NSNotification)
     {
-        Settings.sharedSettings.renderSpeed = 10.0
-
         // Setup theme menu
         self.setupThemes()
         
