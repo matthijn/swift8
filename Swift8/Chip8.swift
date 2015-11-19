@@ -59,6 +59,9 @@ class Chip8
     // Used for sounding a beep when it is non zero, counts down at 60hz
     var soundTimer : UInt8 = 0
     
+    // Flag to keep track if we are playing a sound
+    var isPlayingSound = false;
+    
     // Flag to stop looping if needed
     var isRunning = false
     
@@ -693,9 +696,15 @@ class Chip8
      */
     private func makeNoise()
     {
-        if(self.soundTimer > 0)
+        if(self.soundTimer > 0 && !self.isPlayingSound)
         {
-            self.sound.beep(1.0/60.0)
+            self.sound.startBeep()
+            self.isPlayingSound = true
+        }
+        else if(self.soundTimer <= 0 && self.isPlayingSound)
+        {
+            self.sound.stopBeep()
+            self.isPlayingSound = false
         }
     }
 

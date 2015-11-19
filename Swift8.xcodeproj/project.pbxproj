@@ -24,6 +24,8 @@
 		83AB8BCA1B836E740062010E /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BC91B836E740062010E /* Sound.swift */; };
 		83AB8BCC1B836E7C0062010E /* Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AB8BCB1B836E7C0062010E /* Keyboard.swift */; };
 		83BA38BB1B8A07ED00323285 /* CanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BA38BA1B8A07ED00323285 /* CanvasView.swift */; };
+		83CE7C051BFE6438008B3ED8 /* sound.wav in Resources */ = {isa = PBXBuildFile; fileRef = 83CE7C041BFE6438008B3ED8 /* sound.wav */; };
+		83CE7C071BFE6530008B3ED8 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83CE7C061BFE6530008B3ED8 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +48,8 @@
 		83AB8BC91B836E740062010E /* Sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sound.swift; sourceTree = "<group>"; };
 		83AB8BCB1B836E7C0062010E /* Keyboard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keyboard.swift; sourceTree = "<group>"; };
 		83BA38BA1B8A07ED00323285 /* CanvasView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CanvasView.swift; sourceTree = "<group>"; };
+		83CE7C041BFE6438008B3ED8 /* sound.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sound.wav; sourceTree = "<group>"; };
+		83CE7C061BFE6530008B3ED8 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83CE7C071BFE6530008B3ED8 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,6 +106,7 @@
 			isa = PBXGroup;
 			children = (
 				83AB8BB01B80E5530062010E /* Swift8 */,
+				83CE7C081BFE653C008B3ED8 /* Frameworks */,
 				83AB8BAF1B80E5530062010E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -129,6 +135,7 @@
 		83AB8BC11B80E6570062010E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				83CE7C041BFE6438008B3ED8 /* sound.wav */,
 				8321C2091BFB8D0000374804 /* document-icon.icns */,
 				83AB8BB51B80E5530062010E /* Assets.xcassets */,
 				83AB8BB71B80E5530062010E /* Main.storyboard */,
@@ -146,6 +153,15 @@
 				83AB8BCB1B836E7C0062010E /* Keyboard.swift */,
 			);
 			name = Chip8;
+			sourceTree = "<group>";
+		};
+		83CE7C081BFE653C008B3ED8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				83CE7C061BFE6530008B3ED8 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			path = Swift8;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -207,6 +223,7 @@
 			files = (
 				8321C20A1BFB8D0000374804 /* document-icon.icns in Resources */,
 				83AB8BB61B80E5530062010E /* Assets.xcassets in Resources */,
+				83CE7C051BFE6438008B3ED8 /* sound.wav in Resources */,
 				83AB8BB91B80E5530062010E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
