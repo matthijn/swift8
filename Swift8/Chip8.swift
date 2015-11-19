@@ -626,7 +626,7 @@ class Chip8
             self.makeNoise()
 
             // And call self recursively after that delay
-            delay(1.0/60.0, closure: self.timerLoop)
+            delay(1.0 / (60.0 * Settings.sharedSettings.renderSpeed), closure: self.timerLoop)
         }
 
     }
@@ -643,7 +643,7 @@ class Chip8
             self.tickInstruction()
 
             // And call self recursively after that delay
-            delay(1.0 / self.speed, closure: self.CPUCycleLoop)
+            delay(1.0 / (1000 * Settings.sharedSettings.renderSpeed), closure: self.CPUCycleLoop)
         }
     }
     

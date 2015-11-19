@@ -85,7 +85,7 @@ class Settings
     private func setDefaultValues()
     {
         self.theme = Themes.defaultTheme
-        self.renderSpeed = 500.0
+        self.renderSpeed = 0.5
         self.playSound = true
     }
 

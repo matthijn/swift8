@@ -14,12 +14,6 @@ class Chip8ViewController: NSViewController
     // Holds the chip 8 emulator system
     var chip : Chip8?
     
-    // Limiting how fast the emulator can run
-    let minSpeed = 50.0
-    let maxSpeed = 1000.0
-    
-    let speedStep = 50.0
-    
     // Current speed at which the emulator runs
     var currentSpeed : Double {
         get {
@@ -68,12 +62,12 @@ class Chip8ViewController: NSViewController
     
     func increaseSpeed()
     {
-        self.setSpeed(min(self.currentSpeed + self.speedStep, self.maxSpeed))
+        self.setSpeed(min(self.currentSpeed + 0.1, 1))
     }
     
     func decreaseSpeed()
     {
-        self.setSpeed(max(self.currentSpeed - 100, self.minSpeed))
+        self.setSpeed(max(self.currentSpeed - 0.1, 0.1))
     }
     
     func changeTheme(theme: Theme)

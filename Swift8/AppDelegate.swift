@@ -14,16 +14,23 @@ class AppDelegate: NSObject, NSApplicationDelegate
     // Loading the window controller manually
     lazy var windowController = NSStoryboard(name: "Main", bundle: nil).instantiateControllerWithIdentifier("MainWindowController") as! Chip8WindowController
 
+    // Don't show the initial open file screen if we opened through double clicking a file
+    var didOpenWithFile = false
+    
     func applicationDidFinishLaunching(aNotification: NSNotification)
     {
         // Setup theme menu
         self.setupThemes()
         
-        // Show the initial open screen
-        self.onOpenButton(self)
-        
         // Update the menu reflecting the sound state
         self.setSoundState(Settings.sharedSettings.playSound)
+        
+        // Show the initial open screen
+        
+        if !self.didOpenWithFile
+        {
+            self.onOpenButton(self)
+        }
     }
 
     @IBOutlet weak var themeMenu: NSMenu!
@@ -109,6 +116,7 @@ class AppDelegate: NSObject, NSApplicationDelegate
         
         if url.pathExtension == "ch8"
         {
+            self.didOpenWithFile = true
             self.windowController.loadPath(url)
             return true
         }
