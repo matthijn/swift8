@@ -84,6 +84,12 @@
                                                 </items>
                                             </menu>
                                         </menuItem>
+                                        <menuItem title="Emulate Sounds" keyEquivalent="s" id="prT-Ow-OQ5">
+                                            <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
+                                            <connections>
+                                                <action selector="onEmulateSoundButton:" target="Voe-Tx-rLC" id="Fg5-2D-KXc"/>
+                                            </connections>
+                                        </menuItem>
                                         <menuItem title="Enter Full Screen" keyEquivalent="f" id="NW9-4b-nS1">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
@@ -101,6 +107,7 @@
                 </application>
                 <customObject id="Voe-Tx-rLC" customClass="AppDelegate" customModule="Swift8" customModuleProvider="target">
                     <connections>
+                        <outlet property="emulateSoundMenuItem" destination="prT-Ow-OQ5" id="TFj-t5-0ZD"/>
                         <outlet property="themeMenu" destination="w6R-Vk-IKm" id="C0Z-2q-kXC"/>
                     </connections>
                 </customObject>

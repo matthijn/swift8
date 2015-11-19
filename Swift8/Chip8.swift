@@ -617,7 +617,7 @@ class Chip8
      */
     private func timerLoop()
     {
-        if(self.isRunning)
+        if self.isRunning
         {
             // Make sure the timers countdown
             self.countdownTimers()
@@ -637,7 +637,7 @@ class Chip8
     private func CPUCycleLoop()
     {
         // Determine if we should continue the loop
-        if(self.isRunning)
+        if self.isRunning
         {
             // Handle the next instruction
             self.tickInstruction()
@@ -696,12 +696,12 @@ class Chip8
      */
     private func makeNoise()
     {
-        if(self.soundTimer > 0 && !self.isPlayingSound)
+        if self.soundTimer > 0 && !self.isPlayingSound
         {
             self.sound.startBeep()
             self.isPlayingSound = true
         }
-        else if(self.soundTimer <= 0 && self.isPlayingSound)
+        else if self.soundTimer <= 0 && self.isPlayingSound
         {
             self.sound.stopBeep()
             self.isPlayingSound = false
@@ -714,13 +714,13 @@ class Chip8
     private func countdownTimers()
     {
         // Decrement the delay timer
-        if(self.delayTimer > 0)
+        if self.delayTimer > 0
         {
             self.delayTimer--
         }
         
         // And the sound timer
-        if(self.soundTimer > 0)
+        if self.soundTimer > 0
         {
             self.soundTimer--
         }

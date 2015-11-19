@@ -21,10 +21,15 @@ class AppDelegate: NSObject, NSApplicationDelegate
         
         // Show the initial open screen
         self.onOpenButton(self)
+        
+        // Update the menu reflecting the sound state
+        self.setSoundState(Settings.sharedSettings.playSound)
     }
 
     @IBOutlet weak var themeMenu: NSMenu!
     
+    @IBOutlet weak var emulateSoundMenuItem: NSMenuItem!
+
     func setupThemes()
     {
         self.themeMenu.autoenablesItems = false
@@ -51,7 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate
 
     // MARK: Menu items
     
-    // MARK: Render speed
+    // MARK: Rendering
     
     @IBAction func onIncreaseSpeedButton(sender: AnyObject)
     {
@@ -71,6 +76,19 @@ class AppDelegate: NSObject, NSApplicationDelegate
     @IBAction func onFullScreenButton(sender: AnyObject)
     {
         self.windowController.onFullScreenButton(sender)
+    }
+    
+    
+    @IBAction func onEmulateSoundButton(sender: AnyObject)
+    {
+        self.setSoundState(!Settings.sharedSettings.playSound)
+    }
+    
+    private func setSoundState(newState: Bool)
+    {
+        Settings.sharedSettings.playSound = newState
+        let imageState = (newState) ? 1 : 0
+        self.emulateSoundMenuItem.state = imageState
     }
     
     // MARK: File Menu

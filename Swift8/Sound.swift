@@ -32,8 +32,11 @@ class Sound
     // Tells the system to start making noise
     func startBeep()
     {
-        self.shouldBePlaying = true
-        self.restartPlayback()
+        if Settings.sharedSettings.playSound
+        {
+            self.shouldBePlaying = true
+            self.restartPlayback()
+        }
     }
     
     // And tells the system to stop making noise
