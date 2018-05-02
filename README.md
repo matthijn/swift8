@@ -21,5 +21,8 @@ asdf
 zxcv
 ```
 
+## Download
+Don't feel like compiling? Get [these pre-compiled binaries](https://github.com/Matthijn/swift8/releases) instead!
+
 ## Cheat Sheet
 I’ve made a cheat sheet for the Chip8 system to help development [here](https://github.com/Matthijn/swift8/blob/master/Chip8%20Cheat%20Sheet.pdf).
