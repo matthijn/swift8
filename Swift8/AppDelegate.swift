@@ -75,7 +75,7 @@ class AppDelegate: NSObject, NSApplicationDelegate
         self.windowController.onDecreaseSpeedButton(with: sender)
     }
     
-    func onThemeButton(_ sender: AnyObject)
+    @objc func onThemeButton(_ sender: AnyObject)
     {
         self.windowController.onThemeButton(with: sender)
     }
@@ -95,7 +95,7 @@ class AppDelegate: NSObject, NSApplicationDelegate
     {
         Settings.sharedSettings.playSound = newState
         let imageState = (newState) ? 1 : 0
-        self.emulateSoundMenuItem.state = imageState
+        self.emulateSoundMenuItem.state = NSControl.StateValue(rawValue: imageState)
     }
     
     // MARK: File Menu
@@ -126,4 +126,3 @@ class AppDelegate: NSObject, NSApplicationDelegate
     }
 
 }
-

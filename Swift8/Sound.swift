@@ -59,7 +59,7 @@ class Sound
     // Restart playing from the start
     fileprivate func restartPlayback()
     {
-        self.player.seek(to: kCMTimeZero)
+        self.player.seek(to: CMTime.zero)
         self.player.play()
     }
 

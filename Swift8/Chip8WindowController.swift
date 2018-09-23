@@ -29,7 +29,7 @@ class Chip8WindowController : NSWindowController, NSWindowDelegate
         openPanel.allowsMultipleSelection = false
         openPanel.allowedFileTypes = ["ch8"]
 
-        if openPanel.runModal() == NSModalResponseOK
+        if openPanel.runModal() == NSApplication.ModalResponse.OK
         {
             // Make sure a file is selected
             if let file = openPanel.urls.first
@@ -94,6 +94,6 @@ class Chip8WindowController : NSWindowController, NSWindowDelegate
             self.window!.title = "Swift8 - " + name
         }
         // And add to the opened recently menu
-        NSDocumentController.shared().noteNewRecentDocumentURL(file)
+        NSDocumentController.shared.noteNewRecentDocumentURL(file)
     }
 }

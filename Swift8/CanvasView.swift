@@ -158,7 +158,7 @@ class CanvasView : NSView, Chip8Graphics
                 let rectToDraw = CGRect(x: canvasX, y: canvasY, width: calculatedPixelSize - 1, height: calculatedPixelSize - 1)
 
                 // And draw
-                NSRectFill(rectToDraw)
+                rectToDraw.fill()
             }
         }
         
@@ -167,7 +167,7 @@ class CanvasView : NSView, Chip8Graphics
     func fillBackgroundInRect(_ rect: NSRect)
     {
         self.theme.backgroundColor.set()
-        NSRectFill(rect)
+        rect.fill()
     }
     
 }
