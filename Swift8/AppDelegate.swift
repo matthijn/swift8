@@ -29,7 +29,7 @@ class AppDelegate: NSObject, NSApplicationDelegate
         
         if !self.didOpenWithFile
         {
-            self.onOpenButton(with: self)
+            self.onOpenButton(self)
         }
     }
 
@@ -45,7 +45,7 @@ class AppDelegate: NSObject, NSApplicationDelegate
         for theme in Themes.availableThemes
         {
             // Create the menu item
-            let menuItem = NSMenuItem(title: theme.name, action: #selector(AppDelegate.onThemeButton(with:)), keyEquivalent: String(theme.name[theme.name.startIndex]))
+            let menuItem = NSMenuItem(title: theme.name, action: #selector(AppDelegate.onThemeButton(_:)), keyEquivalent: String(theme.name[theme.name.startIndex]))
             
             menuItem.isEnabled = true
             menuItem.target = self
@@ -65,28 +65,28 @@ class AppDelegate: NSObject, NSApplicationDelegate
     
     // MARK: Rendering
     
-    @IBAction func onIncreaseSpeedButton(with sender: AnyObject)
+    @IBAction func onIncreaseSpeedButton(_ sender: AnyObject)
     {
         self.windowController.onIncreaseSpeedButton(with: sender)
     }
     
-    @IBAction func onDecreaseSpeedButton(with sender: AnyObject)
+    @IBAction func onDecreaseSpeedButton(_ sender: AnyObject)
     {
         self.windowController.onDecreaseSpeedButton(with: sender)
     }
     
-    func onThemeButton(with sender: AnyObject)
+    func onThemeButton(_ sender: AnyObject)
     {
         self.windowController.onThemeButton(with: sender)
     }
     
-    @IBAction func onFullScreenButton(with sender: AnyObject)
+    @IBAction func onFullScreenButton(_ sender: AnyObject)
     {
         self.windowController.onFullScreenButton(with: sender)
     }
     
     
-    @IBAction func onEmulateSoundButton(with sender: AnyObject)
+    @IBAction func onEmulateSoundButton(_ sender: AnyObject)
     {
         self.setSoundState(with: !Settings.sharedSettings.playSound)
     }
@@ -100,12 +100,12 @@ class AppDelegate: NSObject, NSApplicationDelegate
     
     // MARK: File Menu
     
-    @IBAction func onOpenButton(with sender: AnyObject)
+    @IBAction func onOpenButton(_ sender: AnyObject)
     {
         self.windowController.onLoadButton(with: sender)
     }
     
-    @IBAction func onResetButton(with sender: AnyObject)
+    @IBAction func onResetButton(_ sender: AnyObject)
     {
         self.windowController.onResetButton(with: self)
     }

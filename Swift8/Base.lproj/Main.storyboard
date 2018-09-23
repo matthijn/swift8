@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
+        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -36,7 +37,7 @@
                                     <items>
                                         <menuItem title="Open…" keyEquivalent="o" id="W4Y-kA-ewe">
                                             <connections>
-                                                <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="dcs-nS-oGa"/>
+                                                <action selector="onOpenButton:" target="Voe-Tx-rLC" id="dX4-Nx-KeP"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Open Recent" id="K1H-0M-Wkk">
@@ -54,7 +55,7 @@
                                         <menuItem isSeparatorItem="YES" id="9zb-oo-151"/>
                                         <menuItem title="Reset" keyEquivalent="r" id="OLg-am-VVU">
                                             <connections>
-                                                <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="igA-0H-yfS"/>
+                                                <action selector="onResetButton:" target="Voe-Tx-rLC" id="uFu-s9-sZ6"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -74,12 +75,12 @@
                                                 <items>
                                                     <menuItem title="Increase" keyEquivalent="]" id="3LM-eY-nob">
                                                         <connections>
-                                                            <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="7MI-Fc-APp"/>
+                                                            <action selector="onIncreaseSpeedButton:" target="Voe-Tx-rLC" id="A7R-51-aah"/>
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem title="Decrease" keyEquivalent="[" id="Xbo-85-rZJ">
                                                         <connections>
-                                                            <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="brh-Hc-nqr"/>
+                                                            <action selector="onDecreaseSpeedButton:" target="Voe-Tx-rLC" id="V34-hG-Kak"/>
                                                         </connections>
                                                     </menuItem>
                                                 </items>
@@ -88,13 +89,13 @@
                                         <menuItem title="Emulate Sounds" keyEquivalent="s" id="prT-Ow-OQ5">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
-                                                <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="Fg5-2D-KXc"/>
+                                                <action selector="onEmulateSoundButton:" target="Voe-Tx-rLC" id="mZP-rK-dTu"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Enter Full Screen" keyEquivalent="f" id="NW9-4b-nS1">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
-                                                <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="VqP-nm-Jfo"/>
+                                                <action selector="onFullScreenButton:" target="Voe-Tx-rLC" id="gCt-Tb-FRV"/>
                                             </connections>
                                         </menuItem>
                                     </items>
