@@ -8,18 +8,18 @@
 
 import Cocoa
 
-extension NSUserDefaults
+extension UserDefaults
 {
     
-    func setColor(value: NSColor, forKey key: String)
+    func setColor(color value: NSColor, forKey key: String)
     {
-        let data = NSArchiver.archivedDataWithRootObject(value)
-        self.setObject(data, forKey: key)
+        let data = NSArchiver.archivedData(withRootObject: value)
+        self.set(data, forKey: key)
     }
     
-    func colorForKey(key: String) -> NSColor?
+    func color(for key: String) -> NSColor?
     {
-        if let data = self.dataForKey(key), let object = NSUnarchiver.unarchiveObjectWithData(data)
+        if let data = self.data(forKey: key), let object = NSUnarchiver.unarchiveObject(with: data)
         {
             return object as? NSColor
         }

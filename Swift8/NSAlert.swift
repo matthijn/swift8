@@ -11,13 +11,13 @@ import Cocoa
 extension NSAlert
 {
 
-    static func showSimpleWarning(warning: String, inWindow window: NSWindow)
+    static func showSimpleWarning(message warning: String, inWindow window: NSWindow)
     {
         let alert = NSAlert()
-        alert.addButtonWithTitle("OK")
+        alert.addButton(withTitle: "OK")
         alert.messageText = warning
-        alert.alertStyle = .WarningAlertStyle
-        alert.beginSheetModalForWindow(window, completionHandler: nil)
+        alert.alertStyle = .warning
+        alert.beginSheetModal(for: window, completionHandler: nil)
     }
 
 }

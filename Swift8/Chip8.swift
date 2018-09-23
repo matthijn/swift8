@@ -33,19 +33,19 @@ class Chip8
     static let RomLocation : UInt16 = 0x200
     
     // Will hold the current rom
-    var rom : NSData?
+    var rom : Data?
     
     // Will hold the memory
-    var memory = [UInt8](count: Chip8.MemorySize, repeatedValue: 0)
+    var memory = [UInt8](repeating: 0, count: Chip8.MemorySize)
     
     // The register (last item in the register (VF) doubles as carry flag)
-    var V = [UInt8](count: Chip8.RegisterSize, repeatedValue: 0)
+    var V = [UInt8](repeating: 0, count: Chip8.RegisterSize)
     
     // The address register
     var I : UInt16 = 0
     
     // The stack
-    var stack = [UInt16](count: Chip8.StackSize, repeatedValue: 0)
+    var stack = [UInt16](repeating: 0, count: Chip8.StackSize)
 
     // Points to the current item in the stack
     var sp : UInt8 = 0
@@ -74,7 +74,7 @@ class Chip8
     let keyboard : Keyboard
     
     // The queue we are calculating on so we don't have it on the main graphics thread
-    let dispatchQueue = dispatch_queue_create("nl.indev.chip8", nil);
+    let dispatchQueue = DispatchQueue(label: "nl.indev.chip8", attributes: []);
     
     // Mapping every opcode to a closure
     
@@ -99,7 +99,7 @@ class Chip8
             Opcode(code: 0xF065, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
                 
-                for var currentRegister = 0; currentRegister <= registerX; currentRegister++
+                for currentRegister in 0 ..< registerX
                 {
                     // Get the byte from memory
                     let memoryByte = self.memory[Int(self.I) + currentRegister]
@@ -113,7 +113,7 @@ class Chip8
             Opcode(code: 0xF055, callback: { arg in
                 let registerX = Int(arg & 0x0F00) >> 8
                 
-                for var currentRegister = 0; currentRegister <= registerX; currentRegister++
+                for currentRegister in 0 ..< registerX
                 {
                     // Get byte from register
                     let registerByte = self.V[currentRegister]
@@ -130,7 +130,7 @@ class Chip8
                 
                 // With the binary decimal representation (unpacked) every single digit of a number is stored in a seperate byte
                 // Number can be max three digits long (8 bits)
-                for var i = 2; i >= 0; i--
+                for i in (0 ..< 2).reversed()
                 {
                     // Getting the current smallest digit of the whole number
                     let currentValue = valueX % 10
@@ -241,7 +241,7 @@ class Chip8
                 // Draw the graphics
                 
                 // Returns wether the "cleared a pixel while drawing" flag should be true
-                if self.graphics.draw(memorySlice, x: valueX, y: valueY)
+                if self.graphics.draw(sprite: memorySlice, x: valueX, y: valueY)
                 {
                     self.V[0xF] = 1
                 }
@@ -467,7 +467,7 @@ class Chip8
             // CALL_ADDR (call address on subroutine)
             Opcode(code: 0x2000, callback: { arg in
                 // Increment stack
-                self.sp++
+                self.sp += 1
                 
                 // Place current address on the stack
                 self.stack[Int(self.sp)] = self.pc
@@ -487,7 +487,7 @@ class Chip8
                 self.pc = self.stack[Int(self.sp)]
                 
                 // Decrement stack pointer
-                self.sp--
+                self.sp -= 1
             }),
             
             // CLS (clear the display)
@@ -510,7 +510,7 @@ class Chip8
     /**
      * Load data into memory
      */
-    func load(rom: NSData, autostart : Bool = true)
+    func load(_ rom: Data, autostart : Bool = true)
     {
         // Keep track of the rom
         self.rom = rom
@@ -520,11 +520,11 @@ class Chip8
         self.reset()
         
         // Converting NSData to byte array
-        var bytesArray = [UInt8](count: rom.length, repeatedValue: 0)
-        rom.getBytes(&bytesArray, length: rom.length)
+        var bytesArray = [UInt8](repeating: 0, count: rom.count)
+        (rom as NSData).getBytes(&bytesArray, length: rom.count)
         
         // Getting each byte and moving it to the correct spot in memory
-        for (index, byte) in bytesArray.enumerate()
+        for (index, byte) in bytesArray.enumerated()
         {
             let indexInMemory = Chip8.RomLocation + UInt16(index)
             self.memory[Int(indexInMemory)] = byte
@@ -539,7 +539,7 @@ class Chip8
     /**
      * Reloads the current rom again 
      */
-    func resetRom(autostart: Bool)
+    func resetRom(_ autostart: Bool)
     {
         self.load(self.rom!, autostart: autostart)
     }
@@ -553,10 +553,10 @@ class Chip8
         self.stopLoop()
         
         // And reset
-        self.memory = [UInt8](count: Chip8.MemorySize, repeatedValue: 0)
-        self.V = [UInt8](count: Chip8.RegisterSize, repeatedValue: 0)
+        self.memory = [UInt8](repeating: 0, count: Chip8.MemorySize)
+        self.V = [UInt8](repeating: 0, count: Chip8.RegisterSize)
         self.I = 0
-        self.stack = [UInt16](count: Chip8.StackSize, repeatedValue: 0)
+        self.stack = [UInt16](repeating: 0, count: Chip8.StackSize)
         self.sp = UInt8(self.stack.count - 1)
         self.sp = 0
         self.pc = Chip8.RomLocation
@@ -595,7 +595,7 @@ class Chip8
     /**
      * Changes the speed of the emulation
      */
-    func changeSpeed(speed: Double)
+    func changeSpeed(_ speed: Double)
     {
         self.speed = speed;
     }
@@ -603,9 +603,9 @@ class Chip8
     /**
      * Loads the font sprite information in memory
      */
-    private func loadFonts()
+    fileprivate func loadFonts()
     {
-        for (index, fontByte) in Graphics.FontSpriteData.enumerate()
+        for (index, fontByte) in Graphics.FontSpriteData.enumerated()
         {
             let indexWithOffset = Int(UInt16(index) + Chip8.FontMemoryLocation)
             self.memory[indexWithOffset] = fontByte
@@ -615,7 +615,7 @@ class Chip8
     /**
      * The countdown timer loop
      */
-    private func timerLoop()
+    fileprivate func timerLoop()
     {
         if self.isRunning
         {
@@ -634,7 +634,7 @@ class Chip8
     /**
      * The CPU Cycle loop
      */
-    private func CPUCycleLoop()
+    fileprivate func CPUCycleLoop()
     {
         // Determine if we should continue the loop
         if self.isRunning
@@ -650,18 +650,18 @@ class Chip8
     /**
      * Wrapper for the dispatch_after to make it a bit more easy
      */
-    func delay(delay: Double, closure: ()->()) {
+    func delay(_ delay: Double, closure: @escaping ()->()) {
         // Calculate delay
-        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(delay * Double(NSEC_PER_SEC)))
+        let delay = DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
         
         // And add to queue
-        dispatch_after(delay, self.dispatchQueue, closure)
+        self.dispatchQueue.asyncAfter(deadline: delay, execute: closure)
     }
     
     /**
      * Counts the timers in the system down
      */
-    private func tickInstruction()
+    fileprivate func tickInstruction()
     {
         // Get current block to run from memory everything which is stored in blocks of two bytes containing both the opcode and "parameters"
         let memoryBlock = UInt16(self.memory[Int(self.pc)]) << 8 | UInt16(self.memory[Int(self.pc + 1)])
@@ -694,7 +694,7 @@ class Chip8
     /**
      * Determines if the attached sound peripherals should make noise
      */
-    private func makeNoise()
+    fileprivate func makeNoise()
     {
         if self.soundTimer > 0 && !self.isPlayingSound
         {
@@ -711,18 +711,18 @@ class Chip8
     /**
      * Counts the timers in the system down
      */
-    private func countdownTimers()
+    fileprivate func countdownTimers()
     {
         // Decrement the delay timer
         if self.delayTimer > 0
         {
-            self.delayTimer--
+            self.delayTimer -= 1
         }
         
         // And the sound timer
         if self.soundTimer > 0
         {
-            self.soundTimer--
+            self.soundTimer -= 1
         }
     }
     

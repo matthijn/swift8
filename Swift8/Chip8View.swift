@@ -29,12 +29,12 @@ class Chip8View : NSView
 
     // MARK: Keyboard keys forwarding
 
-    override func keyUp(theEvent: NSEvent)
+    override func keyUp(with theEvent: NSEvent)
     {
         self.keyboard.keyUp(theEvent)
     }
 
-    override func keyDown(theEvent: NSEvent)
+    override func keyDown(with theEvent: NSEvent)
     {
         self.keyboard.keyDown(theEvent)
     }

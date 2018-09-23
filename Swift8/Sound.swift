@@ -15,7 +15,7 @@ class Sound
     var shouldBePlaying = false
     
     // The sound to play (I'd rather generate the sound on the fly, but that requires more code than I'd like)
-    let soundPath = NSURL(fileURLWithPath: NSBundle.mainBundle().pathForResource("sound", ofType: "wav")!)
+    let soundPath = URL(fileURLWithPath: Bundle.main.path(forResource: "sound", ofType: "wav")!)
     
     // And the player
     let player : AVPlayer
@@ -23,10 +23,10 @@ class Sound
     init()
     {
         // Setup the player
-        self.player = AVPlayer(URL: self.soundPath)
+        self.player = AVPlayer(url: self.soundPath)
 
         // Listen to the player ending so we can loop if needed
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "playbackEnded", name: AVPlayerItemDidPlayToEndTimeNotification, object: self.player)
+        NotificationCenter.default.addObserver(self, selector: "playbackEnded", name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player)
     }
     
     // Tells the system to start making noise
@@ -48,7 +48,7 @@ class Sound
     }
     
     // Resume playback when finished if needed
-    private func playbackEnded()
+    fileprivate func playbackEnded()
     {
         if self.shouldBePlaying
         {
@@ -57,16 +57,16 @@ class Sound
     }
     
     // Restart playing from the start
-    private func restartPlayback()
+    fileprivate func restartPlayback()
     {
-        self.player.seekToTime(kCMTimeZero)
+        self.player.seek(to: kCMTimeZero)
         self.player.play()
     }
 
     // Clean up
     deinit
     {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
     
 }

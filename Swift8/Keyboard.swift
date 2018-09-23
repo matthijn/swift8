@@ -33,13 +33,13 @@ class Keyboard
     
     var currentKey : Int8 = -1
 
-    func keyUp(event: NSEvent)
+    func keyUp(_ event: NSEvent)
     {
         // Key stopped being pressed so setting current key to -1 to represent nothing
         self.currentKey = -1
     }
     
-    func keyDown(event: NSEvent)
+    func keyDown(_ event: NSEvent)
     {
         // Setting the current key as the mapped key
         if let mappedKey = self.mapping[UInt8(event.keyCode)]

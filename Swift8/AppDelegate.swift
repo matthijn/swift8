@@ -12,24 +12,24 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate
 {
     // Loading the window controller manually
-    lazy var windowController = NSStoryboard(name: "Main", bundle: nil).instantiateControllerWithIdentifier("MainWindowController") as! Chip8WindowController
+    lazy var windowController = NSStoryboard(name: "Main", bundle: nil).instantiateController(withIdentifier: "MainWindowController") as! Chip8WindowController
 
     // Don't show the initial open file screen if we opened through double clicking a file
     var didOpenWithFile = false
     
-    func applicationDidFinishLaunching(aNotification: NSNotification)
+    func applicationDidFinishLaunching(_ aNotification: Notification)
     {
         // Setup theme menu
         self.setupThemes()
         
         // Update the menu reflecting the sound state
-        self.setSoundState(Settings.sharedSettings.playSound)
+        self.setSoundState(with: Settings.sharedSettings.playSound)
         
         // Show the initial open screen
         
         if !self.didOpenWithFile
         {
-            self.onOpenButton(self)
+            self.onOpenButton(with: self)
         }
     }
 
@@ -45,9 +45,9 @@ class AppDelegate: NSObject, NSApplicationDelegate
         for theme in Themes.availableThemes
         {
             // Create the menu item
-            let menuItem = NSMenuItem(title: theme.name, action: Selector("onThemeButton:"), keyEquivalent: String(theme.name[theme.name.startIndex]))
+            let menuItem = NSMenuItem(title: theme.name, action: #selector(AppDelegate.onThemeButton(with:)), keyEquivalent: String(theme.name[theme.name.startIndex]))
             
-            menuItem.enabled = true
+            menuItem.isEnabled = true
             menuItem.target = self
             menuItem.representedObject = theme
             
@@ -56,7 +56,7 @@ class AppDelegate: NSObject, NSApplicationDelegate
         }
     }
 
-    func applicationWillTerminate(aNotification: NSNotification)
+    func applicationWillTerminate(_ aNotification: Notification)
     {
         // Insert code here to tear down your application
     }
@@ -65,33 +65,33 @@ class AppDelegate: NSObject, NSApplicationDelegate
     
     // MARK: Rendering
     
-    @IBAction func onIncreaseSpeedButton(sender: AnyObject)
+    @IBAction func onIncreaseSpeedButton(with sender: AnyObject)
     {
-        self.windowController.onIncreaseSpeedButton(sender)
+        self.windowController.onIncreaseSpeedButton(with: sender)
     }
     
-    @IBAction func onDecreaseSpeedButton(sender: AnyObject)
+    @IBAction func onDecreaseSpeedButton(with sender: AnyObject)
     {
-        self.windowController.onDecreaseSpeedButton(sender)
+        self.windowController.onDecreaseSpeedButton(with: sender)
     }
     
-    func onThemeButton(sender: AnyObject)
+    func onThemeButton(with sender: AnyObject)
     {
-        self.windowController.onThemeButton(sender)
+        self.windowController.onThemeButton(with: sender)
     }
     
-    @IBAction func onFullScreenButton(sender: AnyObject)
+    @IBAction func onFullScreenButton(with sender: AnyObject)
     {
-        self.windowController.onFullScreenButton(sender)
+        self.windowController.onFullScreenButton(with: sender)
     }
     
     
-    @IBAction func onEmulateSoundButton(sender: AnyObject)
+    @IBAction func onEmulateSoundButton(with sender: AnyObject)
     {
-        self.setSoundState(!Settings.sharedSettings.playSound)
+        self.setSoundState(with: !Settings.sharedSettings.playSound)
     }
     
-    private func setSoundState(newState: Bool)
+    fileprivate func setSoundState(with newState: Bool)
     {
         Settings.sharedSettings.playSound = newState
         let imageState = (newState) ? 1 : 0
@@ -100,28 +100,28 @@ class AppDelegate: NSObject, NSApplicationDelegate
     
     // MARK: File Menu
     
-    @IBAction func onOpenButton(sender: AnyObject)
+    @IBAction func onOpenButton(with sender: AnyObject)
     {
-        self.windowController.onLoadButton(sender)
+        self.windowController.onLoadButton(with: sender)
     }
     
-    @IBAction func onResetButton(sender: AnyObject)
+    @IBAction func onResetButton(with sender: AnyObject)
     {
-        self.windowController.onResetButton(self)
+        self.windowController.onResetButton(with: self)
     }
 
-    func application(sender: NSApplication, openFile filename: String) -> Bool
+    func application(_ sender: NSApplication, openFile filename: String) -> Bool
     {
-        let url = NSURL(fileURLWithPath: filename)
+        let url = URL(fileURLWithPath: filename)
         
         if url.pathExtension == "ch8"
         {
             self.didOpenWithFile = true
-            self.windowController.loadPath(url)
+            self.windowController.loadPath(of: url)
             return true
         }
 
-        NSAlert.showSimpleWarning("Cannot open this type of file.", inWindow: self.windowController.window!)
+        NSAlert.showSimpleWarning(message: "Cannot open this type of file.", inWindow: self.windowController.window!)
         return false
     }
 

@@ -16,15 +16,15 @@ protocol Chip8Graphics
     
     
     // Draw sprite data on given location, return true if it overwrites existing information
-    func draw(spriteData: ArraySlice<UInt8>, x: UInt8, y: UInt8) -> Bool
+    func draw(sprite data: ArraySlice<UInt8>, x: UInt8, y: UInt8) -> Bool
     
 }
 
 class Graphics : Chip8Graphics
 {
     // The number of pixels in the Chip8 system
-    static let ScreenWidth : CGFloat = 64
-    static let ScreenHeight : CGFloat = 32
+    static let ScreenWidth = 64
+    static let ScreenHeight = 32
     
     // Holds the font data that will be loaded in memory to display numbers on screen
     static let FontSpriteData : [UInt8] = [
@@ -66,9 +66,9 @@ class Graphics : Chip8Graphics
      * Draw the sprite data on the given location
      * @return Bool if the sprite overlaps with existing sprite and overwrites it partially (inverting) true is returned, else false
      */
-    func draw(spriteData: ArraySlice<UInt8>, x: UInt8, y: UInt8) -> Bool
+    func draw(sprite data: ArraySlice<UInt8>, x: UInt8, y: UInt8) -> Bool
     {
-        return self.delegate.draw(spriteData, x: x, y: y)
+        return self.delegate.draw(sprite: data, x: x, y: y)
     }
 
 }

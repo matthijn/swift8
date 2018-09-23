@@ -1,7 +1,8 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15A279b" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9059"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.18"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -35,7 +36,7 @@
                                     <items>
                                         <menuItem title="Open…" keyEquivalent="o" id="W4Y-kA-ewe">
                                             <connections>
-                                                <action selector="onOpenButton:" target="Voe-Tx-rLC" id="dcs-nS-oGa"/>
+                                                <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="dcs-nS-oGa"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Open Recent" id="K1H-0M-Wkk">
@@ -53,7 +54,7 @@
                                         <menuItem isSeparatorItem="YES" id="9zb-oo-151"/>
                                         <menuItem title="Reset" keyEquivalent="r" id="OLg-am-VVU">
                                             <connections>
-                                                <action selector="onResetButton:" target="Voe-Tx-rLC" id="igA-0H-yfS"/>
+                                                <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="igA-0H-yfS"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -73,12 +74,12 @@
                                                 <items>
                                                     <menuItem title="Increase" keyEquivalent="]" id="3LM-eY-nob">
                                                         <connections>
-                                                            <action selector="onIncreaseSpeedButton:" target="Voe-Tx-rLC" id="7MI-Fc-APp"/>
+                                                            <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="7MI-Fc-APp"/>
                                                         </connections>
                                                     </menuItem>
                                                     <menuItem title="Decrease" keyEquivalent="[" id="Xbo-85-rZJ">
                                                         <connections>
-                                                            <action selector="onDecreaseSpeedButton:" target="Voe-Tx-rLC" id="brh-Hc-nqr"/>
+                                                            <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="brh-Hc-nqr"/>
                                                         </connections>
                                                     </menuItem>
                                                 </items>
@@ -87,13 +88,13 @@
                                         <menuItem title="Emulate Sounds" keyEquivalent="s" id="prT-Ow-OQ5">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
-                                                <action selector="onEmulateSoundButton:" target="Voe-Tx-rLC" id="Fg5-2D-KXc"/>
+                                                <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="Fg5-2D-KXc"/>
                                             </connections>
                                         </menuItem>
                                         <menuItem title="Enter Full Screen" keyEquivalent="f" id="NW9-4b-nS1">
                                             <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                             <connections>
-                                                <action selector="onFullScreenButton:" target="Voe-Tx-rLC" id="VqP-nm-Jfo"/>
+                                                <action selector="onFullScreenAction:" target="Voe-Tx-rLC" id="VqP-nm-Jfo"/>
                                             </connections>
                                         </menuItem>
                                     </items>
@@ -119,7 +120,7 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController storyboardIdentifier="MainWindowController" showSeguePresentationStyle="single" id="B8D-0N-5wS" customClass="Chip8WindowController" customModule="Swift8" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="Swift8" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="Swift8" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="IQv-IB-iLA">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="620" y="358" width="640" height="320"/>
@@ -147,7 +148,6 @@
                         <subviews>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="Gdf-HG-qTf" customClass="CanvasView" customModule="Swift8" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="640" height="320"/>
-                                <animations/>
                             </customView>
                         </subviews>
                         <constraints>
@@ -156,7 +156,6 @@
                             <constraint firstAttribute="bottom" secondItem="Gdf-HG-qTf" secondAttribute="bottom" id="a5B-8Y-YAL"/>
                             <constraint firstItem="Gdf-HG-qTf" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="erI-Ae-ne9"/>
                         </constraints>
-                        <animations/>
                         <connections>
                             <outlet property="canvasView" destination="Gdf-HG-qTf" id="xPh-6V-2pL"/>
                         </connections>

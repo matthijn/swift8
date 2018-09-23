@@ -13,15 +13,15 @@ class CanvasView : NSView, Chip8Graphics
     // The colors to draw
     var theme = Themes.defaultTheme {
         didSet {
-            self.setNeedsDisplayInRect(self.bounds)
+            self.setNeedsDisplay(self.bounds)
         }
     }
 
     // Calculating how big each pixel should be drawn based on current view size (original screen size is 64 x 32 pixels, which is puny)
-    var pixelSize : CGFloat {
+    var pixelSize: Int {
         get {
-            let widthRatio = self.frame.size.width / 2
-            let heightRatio = self.frame.size.height / 1
+            let widthRatio = Int(self.frame.size.width / 2)
+            let heightRatio = Int(self.frame.size.height / 1)
             
             let pixelSize = min(widthRatio, heightRatio) / Graphics.ScreenHeight
             return pixelSize
@@ -29,7 +29,7 @@ class CanvasView : NSView, Chip8Graphics
     }
 
     // Every bool will light up one pixel if it is true
-    var pixels = [Bool](count: Int(Graphics.ScreenWidth * Graphics.ScreenHeight), repeatedValue: false)
+    var pixels = [Bool](repeating: false, count: Int(Graphics.ScreenWidth * Graphics.ScreenHeight))
     
     // MARK: Chip8Graphics
     
@@ -38,37 +38,37 @@ class CanvasView : NSView, Chip8Graphics
     */
     func clear()
     {
-        self.pixels = [Bool](count: Int(Graphics.ScreenWidth * Graphics.ScreenHeight), repeatedValue: false)
-        self.setNeedsDisplayInRect(self.bounds)
+        self.pixels = [Bool](repeating: false, count: Int(Graphics.ScreenWidth * Graphics.ScreenHeight))
+        self.setNeedsDisplay(self.bounds)
     }
     
    /**
     * Storing the data to draw in the correct location
     */
-    func draw(spriteData: ArraySlice<UInt8>, x: UInt8, y: UInt8) -> Bool
+    func draw(sprite data: ArraySlice<UInt8>, x: UInt8, y: UInt8) -> Bool
     {
         var didOverwrite = false
      
-        for (index, var spriteByte) in spriteData.enumerate()
+        for (index, var spriteByte) in data.enumerated()
         {
 
             // Every next byte will be drawn one row lower then the previous
             var currentY = y + UInt8(index)
             
             // Wrapping the Y around
-            if CGFloat(currentY) >= Graphics.ScreenHeight
+            if currentY >= Graphics.ScreenHeight
             {
                 currentY = currentY - UInt8(Graphics.ScreenHeight)
             }
             
             // Every bit in the spritedata byte corresponds to one pixel mapping it to the self.pixels array
-            for var bitIndex = 0; bitIndex < 8; bitIndex++
+            for bitIndex in 0 ..< 8
             {
                 // Every bit will be drawn on the next column
                 var currentX = x &+ UInt8(bitIndex)
                 
                 // Wrapping the x around
-                if CGFloat(currentX) >= Graphics.ScreenWidth
+                if currentX >= Graphics.ScreenWidth
                 {
                     currentX = currentX - UInt8(Graphics.ScreenWidth)
                 }
@@ -107,7 +107,7 @@ class CanvasView : NSView, Chip8Graphics
         }
         
         // Todo: Get the rect for the bounds to update for improved performance
-        self.setNeedsDisplayInRect(self.bounds)
+        self.setNeedsDisplay(self.bounds)
         
         
         return didOverwrite
@@ -118,7 +118,7 @@ class CanvasView : NSView, Chip8Graphics
     /**
      * Draws on the NSView
      */
-    override func drawRect(dirtyRect: NSRect)
+    override func draw(_ dirtyRect: NSRect)
     {   
         // Todo: Determine which parts need to be drawn for increased performance instead of drawing all
         self.fillBackgroundInRect(dirtyRect)
@@ -130,16 +130,16 @@ class CanvasView : NSView, Chip8Graphics
         let renderWidth = self.pixelSize * Graphics.ScreenWidth
         let renderHeight = self.pixelSize * Graphics.ScreenHeight
         
-        let offsetY = (self.frame.size.height - renderHeight) / 2
-        let offsetX = (self.frame.size.width - renderWidth) / 2
+        let offsetY = (Int(self.frame.size.height) - renderHeight) / 2
+        let offsetX = (Int(self.frame.size.width) - renderWidth) / 2
         
         var colorToDraw = self.theme.backgroundColor
         
         // Iterate over every row
-        for var y : CGFloat = 0; y < Graphics.ScreenHeight; y++
+        for y in 0 ..< Int(Graphics.ScreenHeight)
         {
             // And column
-            for var x : CGFloat = 0; x < Graphics.ScreenWidth; x++
+            for x in 0 ..< Int(Graphics.ScreenWidth)
             {
                 // Get the state for the current pixel
                 let pixelIndex = Int(x + (y * Graphics.ScreenWidth))
@@ -155,7 +155,7 @@ class CanvasView : NSView, Chip8Graphics
                 let canvasY = ((Graphics.ScreenHeight * calculatedPixelSize) - (y * calculatedPixelSize) - calculatedPixelSize) + offsetY
 
                 // Making the pixel size a tiny bit smaller, since that looks more cool
-                let rectToDraw = CGRectMake(canvasX, canvasY, calculatedPixelSize - 1, calculatedPixelSize - 1)
+                let rectToDraw = CGRect(x: canvasX, y: canvasY, width: calculatedPixelSize - 1, height: calculatedPixelSize - 1)
 
                 // And draw
                 NSRectFill(rectToDraw)
@@ -164,7 +164,7 @@ class CanvasView : NSView, Chip8Graphics
         
     }
     
-    func fillBackgroundInRect(rect: NSRect)
+    func fillBackgroundInRect(_ rect: NSRect)
     {
         self.theme.backgroundColor.set()
         NSRectFill(rect)

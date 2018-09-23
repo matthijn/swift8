@@ -14,13 +14,13 @@ extension String
     var upperCaseFirst : String {
         get {
             // Get the first character as uppercase
-            let upperCase = String(self[startIndex]).uppercaseString
+            let upperCase = String(self[startIndex]).uppercased()
 
             // Returning a new string so it does not modify self
             var toUpperCase = self
             
             // Replacing first character with the uppercase character
-            toUpperCase.replaceRange(startIndex...startIndex, with: upperCase)
+            toUpperCase.replaceSubrange(startIndex...startIndex, with: upperCase)
             
             return toUpperCase
         }

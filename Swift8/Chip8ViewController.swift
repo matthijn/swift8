@@ -50,7 +50,7 @@ class Chip8ViewController: NSViewController
         self.applySettings()
     }
     
-    func loadRom(rom: NSData, autostart: Bool)
+    func load(rom: Data, autostart: Bool)
     {
         self.chip?.load(rom, autostart: true)
     }
@@ -62,15 +62,15 @@ class Chip8ViewController: NSViewController
     
     func increaseSpeed()
     {
-        self.setSpeed(min(self.currentSpeed + 0.1, 1))
+        self.setSpeed(with: min(self.currentSpeed + 0.1, 1))
     }
     
     func decreaseSpeed()
     {
-        self.setSpeed(max(self.currentSpeed - 0.1, 0.1))
+        self.setSpeed(with: max(self.currentSpeed - 0.1, 0.1))
     }
     
-    func changeTheme(theme: Theme)
+    func changeTheme(with theme: Theme)
     {
         // Save the new theme in settings
         Settings.sharedSettings.theme = theme
@@ -79,13 +79,13 @@ class Chip8ViewController: NSViewController
         self.canvasView.theme = theme
     }
     
-    private func setSpeed(speed: Double)
+    fileprivate func setSpeed(with speed: Double)
     {
         self.chip?.speed = speed
         Settings.sharedSettings.renderSpeed = speed
     }
     
-    private func applySettings()
+    fileprivate func applySettings()
     {
         // Default to the settings speed
         self.chip?.speed = Settings.sharedSettings.renderSpeed

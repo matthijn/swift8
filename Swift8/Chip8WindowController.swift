@@ -20,7 +20,7 @@ class Chip8WindowController : NSWindowController, NSWindowDelegate
     
     // MARK: User interaction
     
-    func onLoadButton(sender: AnyObject)
+    func onLoadButton(with sender: AnyObject)
     {
         // Show a file dialog
         let openPanel = NSOpenPanel()
@@ -32,68 +32,68 @@ class Chip8WindowController : NSWindowController, NSWindowDelegate
         if openPanel.runModal() == NSModalResponseOK
         {
             // Make sure a file is selected
-            if let file = openPanel.URLs.first
+            if let file = openPanel.urls.first
             {
-                self.loadPath(file)
+                self.loadPath(of: file)
             }
         }
     }
 
-    func onResetButton(sender: AnyObject)
+    func onResetButton(with sender: AnyObject)
     {
         self.chip8ViewController.resetRom()
     }
     
-    func onIncreaseSpeedButton(sender: AnyObject)
+    func onIncreaseSpeedButton(with sender: AnyObject)
     {
         self.chip8ViewController.increaseSpeed()
     }
     
-    func onDecreaseSpeedButton(sender: AnyObject)
+    func onDecreaseSpeedButton(with sender: AnyObject)
     {
         self.chip8ViewController.decreaseSpeed()
     }
     
-    func onThemeButton(sender: AnyObject)
+    func onThemeButton(with sender: AnyObject)
     {
         let theme = sender.representedObject as! Theme
-        self.chip8ViewController.changeTheme(theme)
+        self.chip8ViewController.changeTheme(with: theme)
     }
 
-    func onFullScreenButton(sender: AnyObject)
+    func onFullScreenButton(with sender: AnyObject)
     {
 //        self.chip8ViewController.view.enterFullScreenMode(NSScreen.mainScreen()!, withOptions: nil)
     }
     
     // MARK: Loading files
-    func loadPath(file: NSURL)
+    func loadPath(of file: URL)
     {
         // Try to load the rome
-        if let rom = NSData(contentsOfFile:file.path!)
+        if let rom = try? Data(contentsOf: URL(fileURLWithPath: file.path))
         {
             // Update the interface (show screen / title / recently opened)
             self.updateInterface(file)
             
             // And load the rom
-            self.chip8ViewController.loadRom(rom, autostart: true)
+            self.chip8ViewController.load(rom: rom, autostart: true)
         }
         // Something went wrong, show an alert
         else
         {
-            NSAlert.showSimpleWarning("Could not read the selected file.", inWindow: self.window!)
+            NSAlert.showSimpleWarning(message: "Could not read the selected file.", inWindow: self.window!)
         }
     }
     
-    private func updateInterface(file: NSURL)
+    fileprivate func updateInterface(_ file: URL)
     {
         // Show the window
         self.showWindow(self)
         
         // Update the title
-        let name = file.URLByDeletingPathExtension?.lastPathComponent?.stringByRemovingPercentEncoding
-        self.window!.title = "Swift8 - " + name!
-        
+        if let name = file.deletingPathExtension().lastPathComponent.removingPercentEncoding {
+            self.window!.title = "Swift8 - " + name
+        }
         // And add to the opened recently menu
-        NSDocumentController.sharedDocumentController().noteNewRecentDocumentURL(file)
+        NSDocumentController.shared().noteNewRecentDocumentURL(file)
     }
 }
